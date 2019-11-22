@@ -19,7 +19,8 @@ interactive_table1
 Table 2: Overview of aspects relevant for editors and authors, i.e. which submission formats are supported, how authors can upload materials, and copyright.
 
 ```{r I2, include=T}
-Data_interactive_2=cbind(interactive[,1], interactive[,5:8])
+Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
+colnames(Data_interactive_2)[1]=c("Application")
 interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table2
 ```
@@ -27,7 +28,8 @@ interactive_table2
 Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
 
 ```{r I3, include=T}
-Data_interactive_3=cbind(interactive[,1], interactive[,9:13])
+Data_interactive_3=cbind(interactive$Application, interactive[,9:13])
+colnames(Data_interactive_3)[1]=c("Application")
 interactive_table3=datatable(Data_interactive_3, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table3
 ```
@@ -35,7 +37,8 @@ interactive_table3
 Table 4: Overview of properties relevant for long-term preservation, i.e. how the research materials are stored, if they can be modified/deleted after publication, and how they can be shared in articles.
 
 ```{r I4, include=T}
-Data_interactive_4=cbind(interactive[,1], interactive[,14:17])
+Data_interactive_4=cbind(interactive$Application, interactive[,14:17])
+colnames(Data_interactive_4)[1]=c("Application")
 interactive_table4=datatable(Data_interactive_4, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table4
 ```
