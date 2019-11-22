@@ -4,26 +4,38 @@ output: html_document
 ---
 
 ```{r setup, include=T}
-
 #install.packages("DT")
 library(DT)
-
-
 interactive=read.csv("Data.csv", sep=",", header=T)
+```
 
-interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=5))
+Table 1: Overview of properties relevant for publishers, i.e., whether self-hosting is possible (* denotes only self-hosting is possible), which license the applications have, addressed research area, and the stage of the project (in use or beta).
+
+```{r I1, include=T}
+interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table1
+```
 
-Daten_interactive_2=cbind(interactive[,1], interactive[,5:8])
-interactive_table2=datatable(Daten_interactive_2, options=list(pagelenth=5))
+Table 2: Overview of aspects relevant for editors and authors, i.e. which submission formats are supported, how authors can upload materials, and copyright.
+
+```{r I2, include=T}
+Data_interactive_2=cbind(interactive[,1], interactive[,5:8])
+interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table2
+```
 
-Daten_interactive_3=cbind(interactive[,1], interactive[,9:13])
-interactive_table3=datatable(Daten_interactive_3, options=list(pagelenth=5))
+Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
+
+```{r I3, include=T}
+Data_interactive_3=cbind(interactive[,1], interactive[,9:13])
+interactive_table3=datatable(Data_interactive_3, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table3
+```
 
-Daten_interactive_4=cbind(interactive[,1], interactive[,14:17])
-interactive_table4=datatable(Daten_interactive_4, options=list(pagelenth=5))
+Table 4: Overview of properties relevant for long-term preservation, i.e. how the research materials are stored, if they can be modified/deleted after publication, and how they can be shared in articles.
+
+```{r I4, include=T}
+Data_interactive_4=cbind(interactive[,1], interactive[,14:17])
+interactive_table4=datatable(Data_interactive_4, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table4
-
 ```
