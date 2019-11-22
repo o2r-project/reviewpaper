@@ -1,0 +1,29 @@
+---
+title: "Interactive table for review paper"
+output: html_document
+---
+
+```{r setup, include=T}
+
+#install.packages("DT")
+library(DT)
+
+
+interactive=read.csv("Data.csv", sep=",", header=T)
+
+interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=5))
+interactive_table1
+
+Daten_interactive_2=cbind(interactive[,1], interactive[,5:8])
+interactive_table2=datatable(Daten_interactive_2, options=list(pagelenth=5))
+interactive_table2
+
+Daten_interactive_3=cbind(interactive[,1], interactive[,9:13])
+interactive_table3=datatable(Daten_interactive_3, options=list(pagelenth=5))
+interactive_table3
+
+Daten_interactive_4=cbind(interactive[,1], interactive[,14:17])
+interactive_table4=datatable(Daten_interactive_4, options=list(pagelenth=5))
+interactive_table4
+
+```
