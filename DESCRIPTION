@@ -1,0 +1,27 @@
+Type: Compendium
+Package: Reprodubility Infrastructures Review Paper
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.1
+Authors@R: 
+    c(person(given = "Markus",
+             family = "Konkol",
+             role = c("aut", "cre"),
+             email = "m.konkol@uni-muenster.de",
+             comment = c(ORCID = "0000-0001-6651-0976"),
+      person(given = "Goulier",
+             family = "Laura",
+             role = c("aut")),
+      person(given = "Nuest",
+             family = "Daniel",
+             role = c("ctb"),
+             email = "daniel.nuest@uni-muenster.de",
+             comment = c(ORCID = "0000-0002-0024-5046"))
+Description: This repository contains the data and code for the review paper
+    'Publishing computational research - A review of infrastructures for
+    reproducible and transparent scholarly communication'.
+License: Apache 2.0 + file LICENSE
+Depends: 
+    DT,
+    rmarkdown
+Encoding: UTF-8
+LazyData: true
