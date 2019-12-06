@@ -13,6 +13,11 @@ Table 1: Overview of properties relevant for publishers, i.e., whether self-host
 
 ```{r I1, include=T}
 interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
+
+link=("https://codeocean.com/")
+
+
+interactive_table1[1,1]=paste0("[", link, "](", link, ")", stringsAsFactors=F)
 interactive_table1
 ```
 
@@ -23,6 +28,9 @@ Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
 colnames(Data_interactive_2)[1]=c("Application")
 interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table2
+
+Data_interactive_2$Application[1]=paste0("[", link, "](", link, ")", stringsAsFactors=F)
+Data_interactive_2
 ```
 
 Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
