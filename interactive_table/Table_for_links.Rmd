@@ -22,12 +22,19 @@ Table 2: Overview of aspects relevant for editors and authors, i.e. which submis
 
 ```{r I2, include=T}
 Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
+Data_interactive_2
 colnames(Data_interactive_2)[1]=c("Application")
+Data_interactive_2
+tmp = as.character(Data_interactive_2$Application)
+tmp[1] <- paste0('[code ocean](https://codeocean.com/)')
+tmp <- as.factor(tmp)
+Data_interactive_2$Application=tmp
+Data_interactive_2
 #interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 #interactive_table2
+knitr::kable(head(Data_interactive_2))
 
 
-link=("https://codeocean.com/")
 
 Data_interactive_2$Application[1]=paste0("[", link, "](", link, ")", stringsAsFactors=F)
 Data_interactive_2
@@ -36,6 +43,13 @@ Data_interactive_2
 Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
 
 ```{r I3, include=T}
+# some urls
+urls <- rep("https://stackoverflow.com/", 10)
+# use paste0 to compose markdown-formatted hyperlinks
+mtcars$mpg <- paste0("[", mtcars$mpg, "](", urls, ")")
+mtcars
+# print the table, with hyperlinked text
+knitr::kable(head(mtcars))
 #Data_interactive_3=cbind(interactive$Application, interactive[,9:13])
 #colnames(Data_interactive_3)[1]=c("Application")
 #interactive_table3=datatable(Data_interactive_3, options=list(pagelenth=15, lengthMenu = #c(11, 20), targets = 15))
