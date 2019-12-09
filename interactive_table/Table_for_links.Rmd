@@ -25,21 +25,34 @@ Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
 Data_interactive_2
 colnames(Data_interactive_2)[1]=c("Application")
 Data_interactive_2
+
+
 tmp = as.character(Data_interactive_2$Application)
-tmp[1] <- paste0('[code ocean](https://codeocean.com/)')
+tmp[1:3]=c("https://codeocean.com/", "https://stenci.la/", "https://gigantum.com/")
+tmp[1:3] <- paste0("[" ,Data_interactive_2$Application ,"](", tmp, ")")
 tmp <- as.factor(tmp)
 Data_interactive_2$Application=tmp
 Data_interactive_2
 #interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 #interactive_table2
 knitr::kable(head(Data_interactive_2))
-
-
-
-Data_interactive_2$Application[1]=paste0("[", link, "](", link, ")", stringsAsFactors=F)
-Data_interactive_2
 ```
 
+Markus Version, die für eine Variable funktioniert
+```{r I2, include=T}
+Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
+Data_interactive_2
+colnames(Data_interactive_2)[1]=c("Application")
+Data_interactive_2
+tmp = as.character(Data_interactive_2$Application)
+tmp[1] <- paste0('[Code Ocean](https://codeocean.com/)')
+tmp <- as.factor(tmp)
+Data_interactive_2$Application=tmp
+Data_interactive_2
+#interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
+#interactive_table2
+knitr::kable(head(Data_interactive_2))
+```
 Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
 
 ```{r I3, include=T}
