@@ -1959,7 +1959,7 @@ HTMLWidgets.widget({
       if (event !== 'cell_edit' && shinyData.hasOwnProperty(id) && shinyData[id] === JSON.stringify(value))
         return;
       shinyData[id] = JSON.stringify(value);
-      if (HTMLWidgets.shinyMode && Shiny.setInputValue) {
+      if (HTMLWidgets.shinyMode) {
         Shiny.setInputValue(id, value, opts);
         if (!instance.clearInputs[id]) instance.clearInputs[id] = function() {
           Shiny.setInputValue(id, null);
@@ -2764,31 +2764,464 @@ summary {
 library(DT)
 interactive=read.csv(&quot;Data.csv&quot;, sep=&quot;,&quot;, header=T)</code></pre>
 <p>Table 1: Overview of properties relevant for publishers, i.e., whether self-hosting is possible (* denotes only self-hosting is possible), which license the applications have, addressed research area, and the stage of the project (in use or beta).</p>
-<pre class="r"><code>interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
+<pre class="r"><code>Data_interactive_1=interactive[,1:4]
+
+tmp1 = as.character(Data_interactive_1$Application)
+tmp1[1:3]=c(&quot;https://codeocean.com/&quot;, &quot;https://stenci.la/&quot;, &quot;https://gigantum.com/&quot;)
+tmp1[1:3] &lt;- paste0(&quot;[&quot; ,Data_interactive_1$Application ,&quot;](&quot;, tmp1, &quot;)&quot;)</code></pre>
+<pre><code>## Warning in tmp1[1:3] &lt;- paste0(&quot;[&quot;, Data_interactive_1$Application, &quot;](&quot;, :
+## Anzahl der zu ersetzenden Elemente ist kein Vielfaches der Ersetzungslänge</code></pre>
+<pre class="r"><code>tmp1 &lt;- as.factor(tmp1)
+Data_interactive_1$Application=tmp1
+Data_interactive_1</code></pre>
+<pre><code>##                             Application Self.hosting
+## 1  [Code Ocean](https://codeocean.com/)           no
+## 2       [eLife RDS](https://stenci.la/)         yes*
+## 3       [Galaxy](https://gigantum.com/)          yes
+## 4                              Gigantum           no
+## 5                               Manubot          yes
+## 6                           Manuscripts          yes
+## 7                                Binder          yes
+## 8                                   o2r         yes*
+## 9                                 REANA         yes*
+## 10                             ReproZip         yes*
+## 11                           Whole Tale         yes*
+##                        Application.license           Stage
+## 1                                        - in use by [REF]
+## 2                       Apache License 2.0 in use by [REF]
+## 3                     Academic Free L. 3.0 in use by [REF]
+## 4                                      MIT            beta
+## 5                          BSD 3-Clause L. in use by [REF]
+## 6                       Apache License 2.0            beta
+## 7  BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License in use by [REF]
+## 8                       Apache License 2.0            beta
+## 9                                      MIT            beta
+## 10 BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License in use by [REF]
+## 11 BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License            beta</code></pre>
+<pre class="r"><code>knitr::kable(head(Data_interactive_1))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="left">Self.hosting</th>
+<th align="left">Application.license</th>
+<th align="left">Stage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://codeocean.com/">Code Ocean</a></td>
+<td align="left">no</td>
+<td align="left">-</td>
+<td align="left">in use by [REF]</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://stenci.la/">eLife RDS</a></td>
+<td align="left">yes*</td>
+<td align="left">Apache License 2.0</td>
+<td align="left">in use by [REF]</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://gigantum.com/">Galaxy</a></td>
+<td align="left">yes</td>
+<td align="left">Academic Free L. 3.0</td>
+<td align="left">in use by [REF]</td>
+</tr>
+<tr class="even">
+<td align="left">Gigantum</td>
+<td align="left">no</td>
+<td align="left">MIT</td>
+<td align="left">beta</td>
+</tr>
+<tr class="odd">
+<td align="left">Manubot</td>
+<td align="left">yes</td>
+<td align="left">BSD 3-Clause L.</td>
+<td align="left">in use by [REF]</td>
+</tr>
+<tr class="even">
+<td align="left">Manuscripts</td>
+<td align="left">yes</td>
+<td align="left">Apache License 2.0</td>
+<td align="left">beta</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Interactive Table without links
+interactive_table1=datatable(interactive[,1:4], options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table1</code></pre>
-<div id="htmlwidget-85f3c2c02db6aa051391" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85f3c2c02db6aa051391">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["Code Ocean","eLife RDS","Galaxy","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["no","yes*","yes","no","yes","yes","yes","yes*","yes*","yes*","yes*"],["-","Apache License 2.0","Academic Free L. 3.0","MIT","BSD 3-Clause L.","Apache License 2.0","BSD 3-Clause \"New\" or \"Revised\" License","Apache License 2.0","MIT","BSD 3-Clause \"New\" or \"Revised\" License","BSD 3-Clause \"New\" or \"Revised\" License"],["in use by [REF]","in use by [REF]","in use by [REF]","beta","in use by [REF]","beta","in use by [REF]","beta","beta","in use by [REF]","beta"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Self.hosting<\/th>\n      <th>Application.license<\/th>\n      <th>Stage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5ef7f1a0c4a622c39ad4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5ef7f1a0c4a622c39ad4">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["Code Ocean","eLife RDS","Galaxy","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["no","yes*","yes","no","yes","yes","yes","yes*","yes*","yes*","yes*"],["-","Apache License 2.0","Academic Free L. 3.0","MIT","BSD 3-Clause L.","Apache License 2.0","BSD 3-Clause \"New\" or \"Revised\" License","Apache License 2.0","MIT","BSD 3-Clause \"New\" or \"Revised\" License","BSD 3-Clause \"New\" or \"Revised\" License"],["in use by [REF]","in use by [REF]","in use by [REF]","beta","in use by [REF]","beta","in use by [REF]","beta","beta","in use by [REF]","beta"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Self.hosting<\/th>\n      <th>Application.license<\/th>\n      <th>Stage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 <p>Table 2: Overview of aspects relevant for editors and authors, i.e. which submission formats are supported, how authors can upload materials, and copyright.</p>
 <pre class="r"><code>Data_interactive_2=cbind(interactive$Application, interactive[,5:8])
 colnames(Data_interactive_2)[1]=c(&quot;Application&quot;)
+
+tmp2 = as.character(Data_interactive_2$Application)
+tmp2[1:3]=c(&quot;https://codeocean.com/&quot;, &quot;https://stenci.la/&quot;, &quot;https://gigantum.com/&quot;)
+tmp2[1:3] &lt;- paste0(&quot;[&quot; ,Data_interactive_2$Application ,&quot;](&quot;, tmp2, &quot;)&quot;)</code></pre>
+<pre><code>## Warning in tmp2[1:3] &lt;- paste0(&quot;[&quot;, Data_interactive_2$Application, &quot;](&quot;, :
+## Anzahl der zu ersetzenden Elemente ist kein Vielfaches der Ersetzungslänge</code></pre>
+<pre class="r"><code>tmp2 &lt;- as.factor(tmp2)
+Data_interactive_2$Application=tmp2
+Data_interactive_2</code></pre>
+<pre><code>##                             Application
+## 1  [Code Ocean](https://codeocean.com/)
+## 2       [eLife RDS](https://stenci.la/)
+## 3       [Galaxy](https://gigantum.com/)
+## 4                              Gigantum
+## 5                               Manubot
+## 6                           Manuscripts
+## 7                                Binder
+## 8                                   o2r
+## 9                                 REANA
+## 10                             ReproZip
+## 11                           Whole Tale
+##                                            Research.area
+## 1                                                    all
+## 2                                                    all
+## 3                                      biology, medicine
+## 4                            all, focus on life sciences
+## 5                                                    all
+## 6                                                    all
+## 7                                                    all
+## 8                              all, focus on geosciences
+## 9                         all, focus on particle physics
+## 10                                                   all
+## 11 all, focus on economics, materials/political sciences
+##                                      Submission.formats
+## 1             R Markdown, Jupyter notebooks, extensible
+## 2  Jupyter Notebooks, Markdown, R Markdown, Word, LaTeX
+## 3                         Jupyter notebooks, extensible
+## 4                         R Markdown, Jupyter notebooks
+## 5                                              Markdown
+## 6                                 Markdown, Word, Latex
+## 7             R Markdown, Jupyter notebooks, extensible
+## 8                                            R Markdown
+## 9                         Jupyter notebooks, extensible
+## 10                        Jupyter notebooks, extensible
+## 11            R Markdown, Jupyter notebooks, extensible
+##                                       Upload
+## 1                           File upload, Git
+## 2                            created locally
+## 3  File upload, FTP, URL, Short read archive
+## 4                                File upload
+## 5                                  to GitHub
+## 6                                File upload
+## 7     via GitHub/Lab, Gist, Zenodo, Figshare
+## 8                     file upload, ownCcloud
+## 9                            created locally
+## 10                           created locally
+## 11           file upload, DataOne, dataVerse
+##                                           Copyright
+## 1  self-determined but non-permissive is encouraged
+## 2                                     not discussed
+## 3                                     not discussed
+## 4                                     not discussed
+## 5                                     not discussed
+## 6                                     not discussed
+## 7                                     not discussed
+## 8                          self-determined but open
+## 9                                     not discussed
+## 10                                    not discussed
+## 11                         self-determined but open</code></pre>
+<pre class="r"><code>knitr::kable(head(Data_interactive_2))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="left">Research.area</th>
+<th align="left">Submission.formats</th>
+<th align="left">Upload</th>
+<th align="left">Copyright</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://codeocean.com/">Code Ocean</a></td>
+<td align="left">all</td>
+<td align="left">R Markdown, Jupyter notebooks, extensible</td>
+<td align="left">File upload, Git</td>
+<td align="left">self-determined but non-permissive is encouraged</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://stenci.la/">eLife RDS</a></td>
+<td align="left">all</td>
+<td align="left">Jupyter Notebooks, Markdown, R Markdown, Word, LaTeX</td>
+<td align="left">created locally</td>
+<td align="left">not discussed</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://gigantum.com/">Galaxy</a></td>
+<td align="left">biology, medicine</td>
+<td align="left">Jupyter notebooks, extensible</td>
+<td align="left">File upload, FTP, URL, Short read archive</td>
+<td align="left">not discussed</td>
+</tr>
+<tr class="even">
+<td align="left">Gigantum</td>
+<td align="left">all, focus on life sciences</td>
+<td align="left">R Markdown, Jupyter notebooks</td>
+<td align="left">File upload</td>
+<td align="left">not discussed</td>
+</tr>
+<tr class="odd">
+<td align="left">Manubot</td>
+<td align="left">all</td>
+<td align="left">Markdown</td>
+<td align="left">to GitHub</td>
+<td align="left">not discussed</td>
+</tr>
+<tr class="even">
+<td align="left">Manuscripts</td>
+<td align="left">all</td>
+<td align="left">Markdown, Word, Latex</td>
+<td align="left">File upload</td>
+<td align="left">not discussed</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Interactive Table without links
 interactive_table2=datatable(Data_interactive_2, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table2</code></pre>
-<div id="htmlwidget-d70c14cb7152b11a81ec" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d70c14cb7152b11a81ec">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["Code Ocean","eLife RDS","Galaxy","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["all","all","biology, medicine","all, focus on life sciences","all","all","all","all, focus on geosciences","all, focus on particle physics","all","all, focus on economics, materials/political sciences"],["R Markdown, Jupyter notebooks, extensible","Jupyter Notebooks, Markdown, R Markdown, Word, LaTeX","Jupyter notebooks, extensible","R Markdown, Jupyter notebooks","Markdown","Markdown, Word, Latex","R Markdown, Jupyter notebooks, extensible","R Markdown","Jupyter notebooks, extensible","Jupyter notebooks, extensible","R Markdown, Jupyter notebooks, extensible"],["File upload, Git","created locally","File upload, FTP, URL, Short read archive","File upload","to GitHub","File upload","via GitHub/Lab, Gist, Zenodo, Figshare","file upload, ownCcloud","created locally","created locally","file upload, DataOne, dataVerse"],["self-determined but non-permissive is encouraged","not discussed","not discussed","not discussed","not discussed","not discussed","not discussed","self-determined but open","not discussed","not discussed","self-determined but open"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Research.area<\/th>\n      <th>Submission.formats<\/th>\n      <th>Upload<\/th>\n      <th>Copyright<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-0b29b17c657ce8ef839a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0b29b17c657ce8ef839a">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["[Code Ocean](https://codeocean.com/)","[eLife RDS](https://stenci.la/)","[Galaxy](https://gigantum.com/)","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["all","all","biology, medicine","all, focus on life sciences","all","all","all","all, focus on geosciences","all, focus on particle physics","all","all, focus on economics, materials/political sciences"],["R Markdown, Jupyter notebooks, extensible","Jupyter Notebooks, Markdown, R Markdown, Word, LaTeX","Jupyter notebooks, extensible","R Markdown, Jupyter notebooks","Markdown","Markdown, Word, Latex","R Markdown, Jupyter notebooks, extensible","R Markdown","Jupyter notebooks, extensible","Jupyter notebooks, extensible","R Markdown, Jupyter notebooks, extensible"],["File upload, Git","created locally","File upload, FTP, URL, Short read archive","File upload","to GitHub","File upload","via GitHub/Lab, Gist, Zenodo, Figshare","file upload, ownCcloud","created locally","created locally","file upload, DataOne, dataVerse"],["self-determined but non-permissive is encouraged","not discussed","not discussed","not discussed","not discussed","not discussed","not discussed","self-determined but open","not discussed","not discussed","self-determined but open"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Research.area<\/th>\n      <th>Submission.formats<\/th>\n      <th>Upload<\/th>\n      <th>Copyright<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 <p>Table 3: Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.</p>
 <pre class="r"><code>Data_interactive_3=cbind(interactive$Application, interactive[,9:13])
 colnames(Data_interactive_3)[1]=c(&quot;Application&quot;)
+
+tmp3 = as.character(Data_interactive_3$Application)
+tmp3[1:3]=c(&quot;https://codeocean.com/&quot;, &quot;https://stenci.la/&quot;, &quot;https://gigantum.com/&quot;)
+tmp3[1:3] &lt;- paste0(&quot;[&quot; ,Data_interactive_3$Application ,&quot;](&quot;, tmp3, &quot;)&quot;)</code></pre>
+<pre><code>## Warning in tmp3[1:3] &lt;- paste0(&quot;[&quot;, Data_interactive_3$Application, &quot;](&quot;, :
+## Anzahl der zu ersetzenden Elemente ist kein Vielfaches der Ersetzungslänge</code></pre>
+<pre class="r"><code>tmp3 &lt;- as.factor(tmp3)
+Data_interactive_3$Application=tmp3
+Data_interactive_3</code></pre>
+<pre><code>##                             Application
+## 1  [Code Ocean](https://codeocean.com/)
+## 2       [eLife RDS](https://stenci.la/)
+## 3       [Galaxy](https://gigantum.com/)
+## 4                              Gigantum
+## 5                               Manubot
+## 6                           Manuscripts
+## 7                                Binder
+## 8                                   o2r
+## 9                                 REANA
+## 10                             ReproZip
+## 11                           Whole Tale
+##                                      Searching
+## 1                                keyword-based
+## 2                                           no
+## 3                               keyword-based?
+## 4                                keyword-based
+## 5  yes (but only via “manubot” tags on GitHub)
+## 6                                           no
+## 7                                           no
+## 8           spatiotemporal and thematic search
+## 9                                           no
+## 10                                          no
+## 11                               keyword-based
+##                                      Inspection             Download
+## 1               below article, or on Code Ocean               via UI
+## 2                     within article in browser               via UI
+## 3           within UI of Jupyter lab in browser               via UI
+## 4  within UI of Jupyter lab/ RStudio in browser               via UI
+## 5                                     on GitHub yes (but via GitHub)
+## 6                       within UI of Manuscript               via UI
+## 7           within UI of Jupyter lab in browser               via UI
+## 8                              within UI of o2r               via UI
+## 9                                    no support                   no
+## 10                                   no support                   no
+## 11 within UI of Jupyter lab/ RStudio in browser               via UI
+##                          Execution                    Manipulation
+## 1             within UI in browser manually within code in browser
+## 2             within UI in browser manually within code in browser
+## 3             within UI in browser manually within code in browser
+## 4  within UI of local installation manually within code in browser
+## 5                  via Travis (CI)              manually on GitHub
+## 6             within UI in browser manually within code in browser
+## 7             within UI in browser manually within code in browser
+## 8             within UI in browser                using UI widgets
+## 9                         locally?                manually via CLI
+## 10                         locally                manually via CLI
+## 11            within UI in browser manually within code in browser</code></pre>
+<pre class="r"><code>knitr::kable(head(Data_interactive_3))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="left">Searching</th>
+<th align="left">Inspection</th>
+<th align="left">Download</th>
+<th align="left">Execution</th>
+<th align="left">Manipulation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://codeocean.com/">Code Ocean</a></td>
+<td align="left">keyword-based</td>
+<td align="left">below article, or on Code Ocean</td>
+<td align="left">via UI</td>
+<td align="left">within UI in browser</td>
+<td align="left">manually within code in browser</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://stenci.la/">eLife RDS</a></td>
+<td align="left">no</td>
+<td align="left">within article in browser</td>
+<td align="left">via UI</td>
+<td align="left">within UI in browser</td>
+<td align="left">manually within code in browser</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://gigantum.com/">Galaxy</a></td>
+<td align="left">keyword-based?</td>
+<td align="left">within UI of Jupyter lab in browser</td>
+<td align="left">via UI</td>
+<td align="left">within UI in browser</td>
+<td align="left">manually within code in browser</td>
+</tr>
+<tr class="even">
+<td align="left">Gigantum</td>
+<td align="left">keyword-based</td>
+<td align="left">within UI of Jupyter lab/ RStudio in browser</td>
+<td align="left">via UI</td>
+<td align="left">within UI of local installation</td>
+<td align="left">manually within code in browser</td>
+</tr>
+<tr class="odd">
+<td align="left">Manubot</td>
+<td align="left">yes (but only via “manubot” tags on GitHub)</td>
+<td align="left">on GitHub</td>
+<td align="left">yes (but via GitHub)</td>
+<td align="left">via Travis (CI)</td>
+<td align="left">manually on GitHub</td>
+</tr>
+<tr class="even">
+<td align="left">Manuscripts</td>
+<td align="left">no</td>
+<td align="left">within UI of Manuscript</td>
+<td align="left">via UI</td>
+<td align="left">within UI in browser</td>
+<td align="left">manually within code in browser</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Interactive Table without links
 interactive_table3=datatable(Data_interactive_3, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table3</code></pre>
-<div id="htmlwidget-3f77fd99fc3e100539b2" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f77fd99fc3e100539b2">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["Code Ocean","eLife RDS","Galaxy","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["keyword-based","no","keyword-based?","keyword-based","yes (but only via “manubot” tags on GitHub)","no","no","spatiotemporal and thematic search","no","no","keyword-based"],["below article, or on Code Ocean","within article in browser","within UI of Jupyter lab in browser","within UI of Jupyter lab/ RStudio in browser","on GitHub","within UI of Manuscript","within UI of Jupyter lab in browser","within UI of o2r","no support","no support","within UI of Jupyter lab/ RStudio in browser"],["via UI","via UI","via UI","via UI","yes (but via GitHub)","via UI","via UI","via UI","no","no","via UI"],["within UI in browser","within UI in browser","within UI in browser","within UI of local installation","via Travis (CI)","within UI in browser","within UI in browser","within UI in browser","locally?","locally","within UI in browser"],["manually within code in browser","manually within code in browser","manually within code in browser","manually within code in browser","manually on GitHub","manually within code in browser","manually within code in browser","using UI widgets","manually via CLI","manually via CLI","manually within code in browser"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Searching<\/th>\n      <th>Inspection<\/th>\n      <th>Download<\/th>\n      <th>Execution<\/th>\n      <th>Manipulation<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3cef0821f90cf01234bd" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3cef0821f90cf01234bd">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["[Code Ocean](https://codeocean.com/)","[eLife RDS](https://stenci.la/)","[Galaxy](https://gigantum.com/)","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["keyword-based","no","keyword-based?","keyword-based","yes (but only via “manubot” tags on GitHub)","no","no","spatiotemporal and thematic search","no","no","keyword-based"],["below article, or on Code Ocean","within article in browser","within UI of Jupyter lab in browser","within UI of Jupyter lab/ RStudio in browser","on GitHub","within UI of Manuscript","within UI of Jupyter lab in browser","within UI of o2r","no support","no support","within UI of Jupyter lab/ RStudio in browser"],["via UI","via UI","via UI","via UI","yes (but via GitHub)","via UI","via UI","via UI","no","no","via UI"],["within UI in browser","within UI in browser","within UI in browser","within UI of local installation","via Travis (CI)","within UI in browser","within UI in browser","within UI in browser","locally?","locally","within UI in browser"],["manually within code in browser","manually within code in browser","manually within code in browser","manually within code in browser","manually on GitHub","manually within code in browser","manually within code in browser","using UI widgets","manually via CLI","manually via CLI","manually within code in browser"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Searching<\/th>\n      <th>Inspection<\/th>\n      <th>Download<\/th>\n      <th>Execution<\/th>\n      <th>Manipulation<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 <p>Table 4: Overview of properties relevant for long-term preservation, i.e. how the research materials are stored, if they can be modified/deleted after publication, and how they can be shared in articles.</p>
 <pre class="r"><code>Data_interactive_4=cbind(interactive$Application, interactive[,14:17])
 colnames(Data_interactive_4)[1]=c(&quot;Application&quot;)
+
+tmp4 = as.character(Data_interactive_4$Application)
+tmp4[1:3]=c(&quot;https://codeocean.com/&quot;, &quot;https://stenci.la/&quot;, &quot;https://gigantum.com/&quot;)
+tmp4[1:3] &lt;- paste0(&quot;[&quot; ,Data_interactive_4$Application ,&quot;](&quot;, tmp4, &quot;)&quot;)</code></pre>
+<pre><code>## Warning in tmp4[1:3] &lt;- paste0(&quot;[&quot;, Data_interactive_4$Application, &quot;](&quot;, :
+## Anzahl der zu ersetzenden Elemente ist kein Vielfaches der Ersetzungslänge</code></pre>
+<pre class="r"><code>tmp4 &lt;- as.factor(tmp4)
+Data_interactive_4$Application=tmp4
+Data_interactive_4</code></pre>
+<pre><code>##                             Application                        Storing
+## 1  [Code Ocean](https://codeocean.com/)                     Code Ocean
+## 2       [eLife RDS](https://stenci.la/)                      Publisher
+## 3       [Galaxy](https://gigantum.com/)                         Galaxy
+## 4                              Gigantum                       Gigantum
+## 5                               Manubot                         GitHub
+## 6                           Manuscripts                      Anywhere?
+## 7                                Binder Git(Hub/Lab), Zenodo, Figshare
+## 8                                   o2r               Zenodo, owncloud
+## 9                                 REANA                       Anywhere
+## 10                             ReproZip                       Anywhere
+## 11                           Whole Tale             DataOne, dataverse
+##    Modify.after.publication Delete.after.publication
+## 1              not possible             not possible
+## 2              not possible             not possible
+## 3              possible (?)                        ?
+## 4                  possible                 possible
+## 5                  possible                 possible
+## 6              possible (?)                 possible
+## 7                  possible                 possible
+## 8              not possible             not possible
+## 9                  possible                 possible
+## 10                 possible                 possible
+## 11             not possible             not possible
+##                     Sharing
+## 1                       DOI
+## 2              DOI to paper
+## 3                       URL
+## 4                       URL
+## 5             URL to GitHub
+## 6  URL to online repository
+## 7                       URL
+## 8                       URL
+## 9  URL to online repository
+## 10 URL to online repository
+## 11                      DOI</code></pre>
+<pre class="r"><code>knitr::kable(head(Data_interactive_4))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Application</th>
+<th align="left">Storing</th>
+<th align="left">Modify.after.publication</th>
+<th align="left">Delete.after.publication</th>
+<th align="left">Sharing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><a href="https://codeocean.com/">Code Ocean</a></td>
+<td align="left">Code Ocean</td>
+<td align="left">not possible</td>
+<td align="left">not possible</td>
+<td align="left">DOI</td>
+</tr>
+<tr class="even">
+<td align="left"><a href="https://stenci.la/">eLife RDS</a></td>
+<td align="left">Publisher</td>
+<td align="left">not possible</td>
+<td align="left">not possible</td>
+<td align="left">DOI to paper</td>
+</tr>
+<tr class="odd">
+<td align="left"><a href="https://gigantum.com/">Galaxy</a></td>
+<td align="left">Galaxy</td>
+<td align="left">possible (?)</td>
+<td align="left">?</td>
+<td align="left">URL</td>
+</tr>
+<tr class="even">
+<td align="left">Gigantum</td>
+<td align="left">Gigantum</td>
+<td align="left">possible</td>
+<td align="left">possible</td>
+<td align="left">URL</td>
+</tr>
+<tr class="odd">
+<td align="left">Manubot</td>
+<td align="left">GitHub</td>
+<td align="left">possible</td>
+<td align="left">possible</td>
+<td align="left">URL to GitHub</td>
+</tr>
+<tr class="even">
+<td align="left">Manuscripts</td>
+<td align="left">Anywhere?</td>
+<td align="left">possible (?)</td>
+<td align="left">possible</td>
+<td align="left">URL to online repository</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Interactive Table without links
 interactive_table4=datatable(Data_interactive_4, options=list(pagelenth=15, lengthMenu = c(11, 20), targets = 15))
 interactive_table4</code></pre>
-<div id="htmlwidget-9fef09db4c0d9e32108f" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9fef09db4c0d9e32108f">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["Code Ocean","eLife RDS","Galaxy","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["Code Ocean","Publisher","Galaxy","Gigantum","GitHub","Anywhere?","Git(Hub/Lab), Zenodo, Figshare","Zenodo, owncloud","Anywhere","Anywhere","DataOne, dataverse"],["not possible","not possible","possible (?)","possible","possible","possible (?)","possible","not possible","possible","possible","not possible"],["not possible","not possible","?","possible","possible","possible","possible","not possible","possible","possible","not possible"],["DOI","DOI to paper","URL","URL","URL to GitHub","URL to online repository","URL","URL","URL to online repository","URL to online repository","DOI"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Storing<\/th>\n      <th>Modify.after.publication<\/th>\n      <th>Delete.after.publication<\/th>\n      <th>Sharing<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e66faf75ae3e5e97a01a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e66faf75ae3e5e97a01a">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11"],["[Code Ocean](https://codeocean.com/)","[eLife RDS](https://stenci.la/)","[Galaxy](https://gigantum.com/)","Gigantum","Manubot","Manuscripts","Binder","o2r","REANA","ReproZip","Whole Tale"],["Code Ocean","Publisher","Galaxy","Gigantum","GitHub","Anywhere?","Git(Hub/Lab), Zenodo, Figshare","Zenodo, owncloud","Anywhere","Anywhere","DataOne, dataverse"],["not possible","not possible","possible (?)","possible","possible","possible (?)","possible","not possible","possible","possible","not possible"],["not possible","not possible","?","possible","possible","possible","possible","not possible","possible","possible","not possible"],["DOI","DOI to paper","URL","URL","URL to GitHub","URL to online repository","URL","URL","URL to online repository","URL to online repository","DOI"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Application<\/th>\n      <th>Storing<\/th>\n      <th>Modify.after.publication<\/th>\n      <th>Delete.after.publication<\/th>\n      <th>Sharing<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pagelenth":15,"lengthMenu":[11,20],"targets":15,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
 
 
 
