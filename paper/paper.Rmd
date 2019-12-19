@@ -1,30 +1,29 @@
 ---
-title: Publishing computational research - A review of infrastructures for reproducible and transparent scholarly communication (Preprint)
-author:
-  - name: Markus Konkol
-    email: m.konkol@uni-muenster.de
-    affiliation: Institute for Geoinformatics, University of Muenster, Muenster, Germany
-    corresponding: m.konkol@uni-muenster.de
-abstract: |
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget porta erat. Morbi consectetur est vel gravida pretium. Suspendisse ut dui eu ante cursus gravida non sed sem. Nullam sapien tellus, commodo id velit id, eleifend volutpat quam. Phasellus mauris velit, dapibus finibus elementum vel, pulvinar non tellus. Nunc pellentesque pretium diam, quis maximus dolor faucibus id. Nunc convallis sodales ante, ut ullamcorper est egestas vitae. Nam sit amet enim ultrices, ultrices elit pulvinar, volutpat risus.
+title: "Publishing computational research -- A review of infrastructures for reproducible and transparent scholarly communication"
+preprint: true
+author: 
+  - "Markus Konkol (m.konkol@uni-muenster.de), Daniel Nüst, Laura Goulier (Institute for Geoinformatics, University\\ of\\ Münster, Münster,\\ Germany)"
+abstract: >
+  Researchers spend a great deal of time reading research papers.
+  Keshav (2012) provides a three-pass method to researchers to improve their reading skills.
+  This article extends Keshav's method for reading a research compendium.
+  Research compendia are an increasingly used form of publication, which packages not only the research paper's text and figures, but also all data and software for better reproducibility.
+  We introduce the existing conventions for research compendia and suggest how to utilise their shared properties in a structured reading process.
+  Unlike the original, this article is not build upon a long history but intends to provide guidance at the outset of an emerging practice.
+header-includes: >
+  \setlength{\columnsep}{18pt}
+  \usepackage{url}
+  \usepackage{breakurl}
+  \PassOptionsToPackage{hyperindex,breaklinks}{hyperref}
 bibliography: mybibfile.bib
-output: rticles::plos_article
-csl: plos.csl
+output:
+  pdf_document: 
+    fig_caption: true
+    keep_tex: true
+    pandoc_args: ["-V", "classoption=twocolumn"]
 ---
 
 # Introduction
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget porta erat. Morbi consectetur est vel gravida pretium. Suspendisse ut dui eu ante cursus gravida non sed sem. Phasellus mauris velit, dapibus finibus elementum vel, pulvinar non tellus. Nunc pellentesque pretium diam, quis maximus dolor faucibus id. Nunc convallis sodales ante, ut ullamcorper est egestas vitae. Nam sit amet enim ultrices, ultrices elit pulvinar, 
-
-A list
-
-- Item 1
-- Item 2
-
-
-Here are two sample references: @foster2018research [@konkol2019creating].
-Test @Dirac1953888 
-test2 @perignon2019certify
 
 
 
