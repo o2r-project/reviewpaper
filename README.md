@@ -8,7 +8,13 @@ This repository contains the review paper and tables of the review paper _"Publi
 
 ## Citation
 
-to be added after preprint/publication
+### Article
+
+(article currently in preparation for submission)
+
+### Preprint
+
+> Konkol, Markus, Daniel Nüst, and Laura Goulier. 2020. _"Publishing Computational Research -- A Review of Infrastructures for Reproducible and Transparent Scholarly Communication."_ [arXiv:2001.00484](http://arxiv.org/abs/2001.00484) [Cs], January 2020. [http://arxiv.org/abs/2001.00484](http://arxiv.org/abs/2001.00484).
 
 ## License
 
