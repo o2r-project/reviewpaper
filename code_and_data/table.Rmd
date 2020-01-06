@@ -1,0 +1,85 @@
+---
+title: "Publishing computational research -- A review of infrastructures for reproducible and transparent scholarly communication"
+author:
+- affiliation: Institute for Geoinformatics, University of Muenster
+  name: Konkol, Markus
+- affiliation: Institute for Geoinformatics, University of Muenster
+  name: Nüst, Daniel
+- affiliation: Institute for Geoinformatics, University of Muenster
+  name: Goulier, Laura
+date: "6 January 2020"
+licenses:
+  code: Apache License 2.0 
+  data: CC BY-SA 4.0
+  text: CC BY 4.0
+output:
+  html_document: default
+bibliography: mybibfile.bib
+abstract: "Funding agencies increasingly ask applicants to include data and software management plans into proposals. In addition, the author guidelines of scientific journals and conferences more often include a statement on data availability, and some reviewers reject unreproducible submissions. This trend towards open science increases the pressure on authors to provide access to the source code and data underlying the computational results in their scientific papers. Still, publishing reproducible articles is a demanding task and not achieved simply by providing access to code scripts and data files. Consequently, several projects develop solutions to support the publication of executable analyses alongside articles considering the needs of the aforementioned stakeholders. The key contribution of this paper is a review of applications addressing the issue of publishing executable computational research results. We compare the approaches across properties relevant for the involved stakeholders, e.g., provided features and deployment options, and also critically discuss trends and limitations. The review can support publishers to decide which system to integrate into their submission process, editors to recommend tools for researchers, and authors of scientific papers to adhere to reproducibility principles."
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#install.packages("DT")
+library(DT)
+interactive=read.csv("data.csv", sep=",", header=T)
+```
+
+# Results
+
+## Table 1 
+Overview of properties relevant for publishers, i.e., whether self-hosting is possible (* denotes only self-hosting is possible), which license the applications have, addressed research area, and the stage of the project (in use or beta).
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+tmp=as.character(interactive$Application)
+tmp[1:10]=c("https://binderhub.readthedocs.io/en/latest/index.html#", "https://codeocean.com/", "https://elifesciences.org/labs/ad58f08d/introducing-elife-s-first-computationally-reproducible-article", "https://galaxyproject.org/", "https://gigantum.com/", "https://www.manuscripts.io/about/", "https://o2r.info/", "http://reanahub.io/", "https://www.reprozip.org/", "https://wholetale.org/index.html")
+tmp[1:10] <- paste0("[" ,interactive$Application ,"](", tmp, ")")
+tmp <- as.factor(tmp)
+interactive$Application=tmp
+table1=interactive[,1:5]
+knitr::kable(table1)
+```
+
+## Table 2 
+Overview of aspects relevant for editors and authors, i.e. which submission formats are supported, how authors can upload materials, and copyright.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table2=cbind(interactive$Application, interactive[,6:9])
+colnames(table2)[1]=c("Application")
+table2$Application=tmp
+knitr::kable(table2)
+```
+
+## Table 3 
+Overview of features relevant for reviewers and readers, i.e., searching for papers and materials, inspecting code and data, downloading materials, executing the analysis, and manipulating the code (e.g., parameters) to see how changes affect the results.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table3=cbind(interactive$Application, interactive[,10:14])
+colnames(table3)[1]=c("Application")
+table23Application=tmp
+knitr::kable(table3)
+```
+
+## Table 4 
+Overview of properties relevant for long-term preservation, i.e. how the research materials are stored, if they can be modified/deleted after publication, and how they can be shared in articles.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table4=cbind(interactive$Application, interactive[,15:17])
+colnames(table4)[1]=c("Application")
+table4$Application=tmp
+knitr::kable(table4)
+```
+
+# License
+
+This document is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+All contained code is licensed under the [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/).
+
+The data used is licensed under a [Open Data Commons Attribution License](https://opendatacommons.org/licenses/by/).
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+sessioninfo::session_info()
+```
+
+
+# References {#references}
