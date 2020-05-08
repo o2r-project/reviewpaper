@@ -5,7 +5,7 @@ author:
   - "Markus Konkol (m.konkol [at] uni-muenster [dot] de), Daniel Nüst, Laura Goulier (Institute for Geoinformatics, University\\ of\\ Münster, Münster,\\ Germany)"
 abstract: >
  Funding agencies increasingly ask applicants to include data and software management plans into proposals. In addition, the author guidelines of scientific journals and conferences more often include a statement on data availability, and some reviewers reject unreproducible submissions. This trend towards open science increases the pressure on authors to provide access to the source code and data underlying the computational results in their scientific papers. Still, publishing reproducible articles is a demanding task and not achieved simply by providing access to code scripts and data files. Consequently, several projects develop solutions to support the publication of executable analyses alongside articles considering the needs of the aforementioned stakeholders. The key contribution of this paper is a review of applications addressing the issue of publishing executable computational research results. We compare the approaches across properties relevant for the involved stakeholders, e.g., provided features and deployment options, and also critically discuss trends and limitations. The review can support publishers to decide which system to integrate into their submission process, editors to recommend tools for researchers, and authors of scientific papers to adhere to reproducibility principles.
-header-includes: >
+increasinglyheader-includes: >
  \setlength{\columnsep}{18pt}
  \usepackage{url}
  \usepackage{breakurl}
@@ -27,9 +27,7 @@ Many scientific articles report on results based on computations, e.g., a statis
 *Scope:* This work focuses on applications that support the publication of research results based on executable source code scripts (e.g., R or Python) and the underlying data. Hence, we did not consider workflow systems (e.g., Taverna [@wolstencroft2013taverna]) or online repositories (e.g., Open Science Framework, https://osf.io/). Also, this paper does not discuss how to work reproducibly since this is covered already in literature (e.g., @rule2019ten, @sandve2013ten, @greenbaum2017structuring, @markowetz2015five). The review is a snapshot of the highly dynamic area of publishing infrastructures. Hence, some of the collected information might become outdated, e.g., an application might extend the set of functionalities or be discontinued. Still, reviewing the current state of the landscape to reflect on available options is helpful for publishers, editors, reviewers, authors, and librarians. All collected data is available in the supplements (see Data and Software Availability).
 The paper is structured as follows: First, we survey fundamental concepts and tools underlying the applications. We then introduce each application and the comparison criteria followed by the actual comparison. The paper concludes by a discussion about the observations we made, trends, and limitations.
 
-# Fundamental concepts and tools
-
-Before reviewing applications for publishing reproducible research, we briefly survey fundamental concepts and tools that underpin the applications. This overview is needed to understand how the applications work and what the limitations are.
+# Background
 
 ## Packaging computational research reproducibly
 
@@ -45,7 +43,16 @@ Frequently mentioned issues related to computational reproducibility concern sen
 
 Large data files, e.g., global remote sensing datasets quickly reach several petabytes. However, a large number of papers are based on datasets that can be stored on public and free data repositories, such as Open Science Framework (file size limit only for individual files, https://help.osf.io/hc/en-us/articles/360019737894-FAQs#what-is-the-individual-file-size-limit) or Zenodo (max. 50GB by default, extension possible, https://help.zenodo.org/whatsnew/). Further limiting factors are long computation times and the need for specialized hardware, such as high-performance computing clusters [@ahn2013overcoming].
 
-# Materials and Methods
+# Methods
+
+<!--
+The methods section should include:
+
+    the aim, design and setting of the study
+    the characteristics of participants or description of materials
+    a clear description of all processes, interventions and comparisons. Generic drug names should generally be used. When proprietary brands are used in research, include the brand names in parentheses
+    the type of statistical analysis used, including a power calculation if appropriate
+-->
 
 To obtain an overview of what the applications supporting the publication of reproducible analyses provide as well as the trends and limitations, we compared them across a set of criteria.
 
