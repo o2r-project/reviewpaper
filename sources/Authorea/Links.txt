@@ -24,3 +24,4 @@
 		https://www.authorea.com/product
 Jupyter Noteb.:	https://support.authorea.com/en-us/article/jupyter-and-ipython-notebooks-1063ym3/
 RMarkdown:	https://www.authorea.com/users/2191/articles/214576-how-to-combine-r-notebooks-and-authorea
+Pricing: https://www.authorea.com/user_plans
