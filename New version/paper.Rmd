@@ -1,0 +1,24 @@
+---
+title: "Publishing computational research -- A review of infrastructures for reproducible and transparent scholarly communication"
+preprint: true
+author: 
+  - "Markus Konkol (m.konkol [at] uni-muenster [dot] de), Daniel Nüst, Laura Goulier (Institute for Geoinformatics, University\\ of\\ Münster, Münster,\\ Germany)"
+abstract: >
+ __Background__ The trend towards open science increases the pressure on authors to provide access to the source code and data used to compute the results reported in their scientific papers. Since sharing materials reproducibly is still challenging, several projects develop solutions to support the release of executable analyses alongside articles.<br/>
+ __Methods__ We reviewed 11 applications which assist researchers in adhering to reproducibility principles. We found them during literature research and interactions with the reproducible research community. An application was included in our analysis if it (i) was actively maintained at the time the data for this paper was collected, (ii) supported the publication of executable code and data, (iii) was connected to the scholarly publication process. By investigating the software documentation and published articles, we compared the applications across 18 criteria, for example, deployment options, and features supporting authors to create and readers to study executable papers.<br/>
+ __Results__ From the eleven applications, eight allow publishers to self-host the system for free whereas three provide paid services. Executable analyses are predominantly submitted using literate programming approaches: Ten applications support Jupyter Notebooks or R Markdown documents. All approaches provide features for readers beyond notebooks, e.g., one-click reproducible results or tools for manipulating the parameter of an analysis. Six applications allow modifying/deleting materials after publication, whereas four provide DOIs.<br/>
+ __Conclusions__ By considering the needs of stakeholders involved in the scholarly communication process, the survey reveals which features the applications provide and what their limitations are. Publishers can opt for a paid service or host an infrastructure by themselves but there is a lack of data regarding the costs for running an own service; Executable documents might require editors to change the journal guidelines and adjust the review process; Authors can leverage open platforms already today, e.g., as supplements or links; Readers can make use of tools to execute an analysis and to manipulate the computational analysis, but they still might need to cope with complex code; Being able to modify published content is beneficial for ongoing projects, however, it might become unclear which version was used in the paper.  
+increasinglyheader-includes: >
+ \setlength{\columnsep}{18pt}
+ \usepackage{url}
+ \usepackage{breakurl}
+ \PassOptionsToPackage{hyperindex,breaklinks}{hyperref}
+ \usepackage{caption}
+ \captionsetup{width=5in}
+bibliography: mybibfile.bib
+output: html_document
+---
+
+# Background
+
+

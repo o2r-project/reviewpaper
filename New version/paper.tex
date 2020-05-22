@@ -1,0 +1,1617 @@
+\documentclass[onecolumn]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Publishing computational research -- A review of infrastructures for reproducible and transparent scholarly communication},
+            pdfauthor={Markus Konkol (m.konkol {[}at{]} uni-muenster {[}dot{]} de), Daniel Nüst, Laura Goulier (Institute for Geoinformatics, University~of~Münster, Münster,~Germany)},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Publishing computational research -- A review of infrastructures for
+reproducible and transparent scholarly communication}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Markus Konkol (m.konkol {[}at{]} uni-muenster {[}dot{]} de), Daniel
+Nüst, Laura Goulier (Institute for Geoinformatics,
+University~of~Münster, Münster,~Germany)}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Funding agencies increasingly ask applicants to include data and
+software management plans into proposals. In addition, the author
+guidelines of scientific journals and conferences more often include a
+statement on data availability, and some reviewers reject unreproducible
+submissions. This trend towards open science increases the pressure on
+authors to provide access to the source code and data underlying the
+computational results in their scientific papers. Still, publishing
+reproducible articles is a demanding task and not achieved simply by
+providing access to code scripts and data files. Consequently, several
+projects develop solutions to support the publication of executable
+analyses alongside articles considering the needs of the aforementioned
+stakeholders. The key contribution of this paper is a review of
+applications addressing the issue of publishing executable computational
+research results. We compare the approaches across properties relevant
+for the involved stakeholders, e.g., provided features and deployment
+options, and also critically discuss trends and limitations. The review
+can support publishers to decide which system to integrate into their
+submission process, editors to recommend tools for researchers, and
+authors of scientific papers to adhere to reproducibility principles.
+\end{abstract}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+Many scientific articles report on results based on computations, e.g.,
+a statistical analysis implemented in R. Publishing the used source code
+and data to adhere to open reproducible research (ORR) principles (i.e.,
+public access to code and data underlying the reported results (Stodden
+et al. 2016)) seems simple. However, several studies concluded that
+papers rarely link to these materials (Stagge et al. 2019; Nüst,
+Granell, et al. 2018). Moreover, due to technical challenges, e.g.,
+capturing the original computational environment of the analyst, even
+accessible materials do not guarantee reproducibility (Chen et al. 2018;
+Konkol, Kray, and Pfeiffer 2018). These issues have several implications
+(Morin et al. 2012): It is difficult (often even impossible) to find
+errors within the analysis, but publishing erroneous papers can damage
+an author's reputation (Herndon, Ash, and Pollin 2013) as well as trust
+in science (National Academies of Sciences, Medicine, and others 2019).
+Also, reviewers cannot verify the results, because they need to
+understand the analysis just by reading the text (Bailey, Borwein, and
+Stodden 2016). Furthermore, other researchers cannot build upon existing
+work but have to collect data and implement the analysis from scratch
+(Powers and Hampton 2018). Finally, libraries cannot preserve the
+materials for future use or education. These issues are also to
+society's disadvantage as it cannot benefit fully from publicly funded
+research (Piwowar and Piwowar 2007). Fortunately, funding bodies, e.g.,
+Horizon 2020
+(\url{https://ec.europa.eu/research/participants/docs/h2020-funding-guide/cross-cutting-issues/open-access-dissemination_en.htm},
+last access for this and the following URLs: 20th Dec 19), increasingly
+consider data and software management plans as part of grant proposals.
+Accordingly, more editors add a section on code and data availability
+into their author guidelines (see, e.g., Nüst, Ostermann, et al. (2019);
+Hrynaszkiewicz (2019)), and reviewers consider reproducibility in their
+decision process (Stark 2018). Nevertheless, these cultural and
+systematic developments (Munafò et al. 2017) alone do not solve the
+plethora of reproducibility issues. Authors often do not know how to
+fulfill the requirements of funding bodies and journals, such as the TOP
+guidelines (Nosek et al. 2015). It is important to consider that the
+range of researchers' programming expertise varies from trained research
+software engineers to self-taught beginners. For these reasons, more and
+more projects work on solutions to support the publication of executable
+supplements. The key contribution of this paper is a review of
+applications that support the publication of executable computational
+research for transparent and reproducible research. This review can be
+used as decision support by publishers who want to comply with
+reproducibility principles, editors and programme committees planning to
+adopt reproducibility requirements in the author guidelines and
+integrate code evaluation in their review process (Eglen and Nüst 2019),
+applicants in the process of creating data and software management plans
+for their funding proposals, and authors searching for tools to
+disseminate their work in a convincing, sustainable, and effective
+manner. We also consider aspects related to preservation relevant for
+librarians dealing with long-term accessibility of research materials.
+Based on the survey, we critically discuss trends and limitations in the
+area of reproducible research infrastructures.
+
+\emph{Scope:} This work focuses on applications that support the
+publication of research results based on executable source code scripts
+(e.g., R or Python) and the underlying data. Hence, we did not consider
+workflow systems (e.g., Taverna (Wolstencroft et al. 2013)) or online
+repositories (e.g., Open Science Framework, \url{https://osf.io/}).
+Also, this paper does not discuss how to work reproducibly since this is
+covered already in literature (e.g., Rule et al. (2019), Sandve et al.
+(2013), Greenbaum et al. (2017), Markowetz (2015)). The review is a
+snapshot of the highly dynamic area of publishing infrastructures.
+Hence, some of the collected information might become outdated, e.g., an
+application might extend the set of functionalities or be discontinued.
+Still, reviewing the current state of the landscape to reflect on
+available options is helpful for publishers, editors, reviewers,
+authors, and librarians. All collected data is available in the
+supplements (see Data and Software Availability). The paper is
+structured as follows: First, we survey fundamental concepts and tools
+underlying the applications. We then introduce each application and the
+comparison criteria followed by the actual comparison. The paper
+concludes by a discussion about the observations we made, trends, and
+limitations.
+
+\hypertarget{background}{%
+\section{Background}\label{background}}
+
+\hypertarget{packaging-computational-research-reproducibly}{%
+\subsection{Packaging computational research
+reproducibly}\label{packaging-computational-research-reproducibly}}
+
+The traditional research article alone is not sufficient to communicate
+a complex computational analysis (Donoho 2010). To address this issue,
+computational reproducibility concerns the publication of code and data
+underlying a research paper. This form of publishing research allows
+reviewers to verify the reported results and readers to reuse the
+materials (Barba 2018). To achieve that, all materials are needed,
+including not only the data and code but also the computational
+environment. A basic concept for such a collection is the research
+compendium, a ``mechanism that combines text, data, and auxiliary
+software into a distributable and executable unit'' (Gentleman and Lang
+2007). The concept was extended by a description and snapshot of the
+software environment using containerization resulting in the executable
+research compendium (Nüst et al. 2017). Containerization and
+virtualization are mechanisms to capture the full software stack of a
+computational environment, including all software dependencies in a
+portable snapshot (Perkel 2019). In contrast to containerization,
+virtualization also includes the operating system kernel. Despite this
+difference, both approaches have proven to improve transparency and
+reproducibility (Boettiger 2015; Howe 2012). One containerization
+technology is Docker, which is based on so-called Dockerfiles, human and
+machine readable recipes to create the image of a virtual environment
+(Boettiger 2015). These recipes add an additional layer of documentation
+making Docker a popular tool in the area of computational
+reproducibility (Nüst and Hinz 2019). A research compendium should
+contain an entry point, i.e., a main file that needs to be executed to
+run the entire analysis. One option to realize these entry points is the
+concept of literate programming, an approach for interweaving source
+code and text in one notebook (Knuth 1984). Two popular realizations of
+such notebooks are Jupyter Notebooks (Kluyver et al. 2016) and R
+Markdown (Baumer et al. 2014). Combining source code and data in one
+document is advantageous over other approaches, such as having code
+scripts and the article separated, which might result in inconsistencies
+between the two. A further advantage is the possibility to execute the
+analysis with a single click, so called one-click-reproduce (Pebesma
+2013). This form of making computational results available lowers the
+barrier for others to reproduce the results and thus increases trust and
+transparency of computer-based research.
+
+\hypertarget{licensing-and-citation}{%
+\subsection{Licensing and Citation}\label{licensing-and-citation}}
+
+Appropriate licensing of research components is crucial yet complex, as
+copyright laws differ between component types, e.g., data, software, and
+text (Stodden 2009). This is particularly important when it comes to
+reusing research components, which is one of the main goals of research
+compendia. A further level of complexity emerges if research compendia
+include, for example, parts of the data and the code of several already
+published papers. A typical use case is reusing code of a specific
+version published in a repository, while the same code is developed and
+stored on a public repository (e.g., GitLab). Besides conscious handling
+of licenses and copyrights, building on top of the work of others
+requires adequate citations. This can be supported by connecting the
+research components with the help of metadata including permanent and
+global identifiers, e.g., DOIs (Stodden et al. 2016), which can be also
+used for data (Park and Wolfram 2019) and software (Fenner et al. 2016).
+
+\hypertarget{ethical-and-technical-issues}{%
+\subsection{Ethical and technical
+issues}\label{ethical-and-technical-issues}}
+
+Frequently mentioned issues related to computational reproducibility
+concern sensitive data and large data files. To tackle the issue of
+sensitive data, a first step would be to anonymize the data. Another
+option is to involve a trustworthy authority which ensures that the
+results in the article can be achieved based on the used data (Pérignon
+et al. 2019). In this case, public access is not required. To ensure
+that these solutions are not exploited, authors should argue why hiding
+or providing synthetic data is required and reviewers can then decide
+whether the reasons are valid. A further solution is the concept of
+cloud-based data enclaves, which provide data access only to authorized
+persons (Foster 2017). Such approaches for access control could be
+connected with the applications discussed in this paper.
+
+Large data files, e.g., global remote sensing datasets quickly reach
+several petabytes. However, a large number of papers are based on
+datasets that can be stored on public and free data repositories, such
+as Open Science Framework (file size limit only for individual files,
+\url{https://help.osf.io/hc/en-us/articles/360019737894-FAQs\#what-is-the-individual-file-size-limit})
+or Zenodo (max. 50GB by default, extension possible,
+\url{https://help.zenodo.org/whatsnew/}). Further limiting factors are
+long computation times and the need for specialized hardware, such as
+high-performance computing clusters (Ahn et al. 2013).
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+To obtain an overview of what the applications supporting the
+publication of reproducible analyses provide as well as the trends and
+limitations, we compared them across a set of criteria.
+
+\hypertarget{materials}{%
+\subsection{Materials}\label{materials}}
+
+To ensure that the stakeholders receive current recommendations, we
+considered an application as part of our analysis if \textbf{(i)} it was
+actively maintained at the time the data for this paper was collected
+(5th-13th Dec 2019), \textbf{(ii)} it supported publishing executable
+code and data which can be inspected and reused, and \textbf{(iii)} the
+application was explicitly connected to the publication process. Hence,
+we did not consider technologies that alone cannot support the
+publication process of code and data as further infrastructure is needed
+(e.g., Docker) or applications that only provide access to data or code
+(e.g., Zenodo). We found the applications during literature research and
+discussions at conferences or workshops.
+
+\hypertarget{applications}{%
+\subsection{Applications}\label{applications}}
+
+Based on the sample criteria, ten applications were selected for the
+review. In the following, we briefly introduce them in alphabetical
+order.
+
+Researchers having a repository (e.g., on GitHub/Lab, Zenodo) including,
+e.g., a Jupyter notebook can use \textbf{Binder}
+(\url{https://mybinder.org/}) to make it available in an executable
+environment (Jupyter et al. 2018). Readers can launch the analysis from
+a Binder-ready repository and inspect the workflow in a browser. Binder
+creates a containerized environment from a repository based on
+configuration files. In \textbf{Code Ocean} (Clyburne-Sherin, Fei, and
+Green 2019), authors can create so-called ``capsules'' which contain
+code, data, and the computational environment including the version of
+the operating system and dependencies. Readers can, while studying the
+article, execute and inspect the analysis in a separate window below the
+online version of the article or on Code Ocean's website. The
+\textbf{eLife Reproducible Document Stack} (RDS,
+\url{https://elifesciences.org/labs/b521cf4d/reproducible-document-stack-towards-a-scalable-solution-for-reproducible-articles})
+enables authors to publish executable documents based on Stencila
+(\url{https://stenci.la/}), an open-source editor for articles. The
+executable document, which contains the whole narrative and executable
+code snippets, is not only a supplement but the actual scientific
+article. \textbf{Galaxy} (Goecks et al. 2010) is a web-based application
+for developing computational analyses without programming expertise.
+Scientists can upload and analyze data by using Jupyter Notebooks
+(Grüning et al. 2017). \textbf{Gigantum} (\url{https://gigantum.com/})
+builds on top of Git and packages code, data, the computational
+environment, and the work history into a Git repository. Gigantum is
+composed of a client application for creating as well as executing
+analyses locally, and a cloud-based infrastructure for sharing
+computations and collaborating with peers. \textbf{Manuscripts}
+(\url{https://www.manuscripts.io/about/}) is an online tool for writing
+executable documents collaboratively based on the concept of literate
+programming, but featuring a ``What you see is what you get'' user
+interface. The runtime environment of the author is, however, not
+considered. \textbf{o2r} (Nüst et al. 2017) addresses publishers who
+want to extend their existing infrastructure by a reproducibility
+service during the process of paper submission (Nüst 2018). Authors can
+also create interactive figures, allowing reviewers and readers to check
+the robustness of the results, e.g., by changing model parameters using
+a slider (Konkol, Kray, and Suleiman 2019). \textbf{REANA} (Šimko et al.
+2019; Chen et al. 2018) provides a formal specification to guide authors
+through the process of capturing input datasets, code, and the
+computational environment. Based on this structure and after creating
+some configuration files manually, REANA provides a set of command line
+interface (CLI) commands to run large analyses on a remote REANA cloud.
+\textbf{ReproZip} (Steeves, Rampin, and Chirigati 2017; Chirigati,
+Rampin, et al. 2016) provides a set of CLI commands for encapsulating
+data, code, and the computational environment automatically. Users can
+execute the resulting bundle on a server provided by ReproZip (Rampin et
+al. 2018) or locally on different computer systems. With \textbf{Whole
+Tale} (Brinckman et al. 2019), authors can create so called ``Tales''
+that combine narrative, data, code, and the computational environment.
+Readers can inspect the materials and execute the analysis in the
+original environment.
+
+\hypertarget{rationale-for-the-comparison-criteria}{%
+\subsection{Rationale for the comparison
+criteria}\label{rationale-for-the-comparison-criteria}}
+
+We identified the comparison criteria considering the needs of
+stakeholders of the scholarly publication process described by Nüst et
+al. (2017), i.e., those of publishers, editors, authors, reviewers,
+readers, and librarians. There is some overlap regarding stakeholder
+needs, for example, publishers as well as authors aim at attracting
+readers and providing a convenient reading experience for reviewers.
+
+\textbf{Publishers} need to know whether they can integrate the
+application into their existing infrastructure. The applications can be
+either made available as open source tools for own hosting or as a
+service hosted by the provider. If the tool is available for free under
+an open license, publishers only have to consider costs for maintaining
+the infrastructure. Moreover, publishers gain full control and can
+customize the interface or processes according to their own
+specifications. In case of a paid service, publishers can take advantage
+of not being responsible for the maintenance. A further criterion
+relevant for publishers is the development stage of the application,
+i.e., if it was already used in published articles.
+
+\textbf{Editors} of journals need to ensure that a service for
+publishing reproducible research is consistent with the tools the
+authors typically use and common practices in their scientific field.
+For example, journals regularly receiving submissions containing Jupyter
+Notebooks should not choose a service that supports only R Markdown.
+This aspect might also affect the author and reviewer guidelines, for
+which the editors are responsible. A further relevant aspect is the
+addressed research area. Some applications might address specific fields
+and thus provide features tailored to domain-specific requirements.
+
+\textbf{Authors} need to submit research materials efficiently. Hence,
+we checked how authors can upload their files and which submission
+formats and programming languages are supported. We also considered
+which license submitted materials receive, since this is a frequently
+mentioned aspect of papers discussing reproducibility guidelines
+(Stodden et al. 2016). Although licensing is relevant for all
+stakeholders, authors are particularly responsible for taking care of
+it. We also checked whether the applications can deal with sensitive
+data.
+
+For \textbf{readers} and \textbf{reviewers}, open reproducible research
+comes with several benefits, such as advanced search capabilities,
+re-running workflows, inspecting results in detail (i.e.~looking at code
+or data files), modifying parameter settings, and reusing the data or
+the analysis for the own work (Konkol and Kray 2018). We thus checked
+whether the tools provide any specific support for such investigations
+of the research materials.
+
+\textbf{Librarians} are tasked with preserving research materials. We
+checked how the materials are stored and shared, and if modifying or
+deleting them after publication is possible.
+
+Based on these comparison criteria, we investigated the project
+websites, the actual applications, GitHub/Lab repositories, scientific
+articles (if available), and blog posts. Since most of the sources were
+not scientific articles, the supplements contain screenshots and URLs to
+show where we found the corresponding information.
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+In the following, we compare the applications considering the needs of
+the stakeholders. \emph{Table 1} summarizes aspects relevant for
+publishers, i.e., if self-hosting is possible, which license is assigned
+to the application, whether it is already in use or in a beta stage, and
+the funding source. From the ten applications, eight allow self-hosting.
+Code Ocean and Gigantum provide the service themselves. eLife RDS, o2r,
+and REANA (in \emph{Table 1} marked by *) require own installations
+since no free online deployments exist. Three applications are released
+under the \emph{BSD-3-Clause License}, three under \emph{MIT} of which
+Gigantum assigned this license to the local tool and not to the cloud
+service, one under \emph{Apache 2.0}, one under the \emph{CPAL 1.0}, and
+one under \emph{Academic Free License 3.0}. These licenses allow
+operators to host their own service as well as to modify the software
+according to their individual needs and styles. This means, however,
+they also have to maintain the infrastructure and provide the required
+technological resources as well as personnel. In contrast, Code Ocean's
+infrastructure and Gigantum's cloud service are provided in exchange for
+payment. From the reviewed applications, four are rather experimental
+and six are already in use as shown by the example papers with workflows
+based on the corresponding application. Seven applications receive
+funding from public or private science foundations. Code Ocean and
+Gigantum offer a commercial service.
+
+\emph{Table 2} summarizes aspects relevant for editors and authors,
+i.e., the scientific domains, supported submission formats, upload
+mechanisms, and license terms. Although none of the investigated
+applications are strictly tied to a specific domain, we observed that
+some of them focus on particular areas. For example, Galaxy provides a
+rich set of features tailored to use cases in the life sciences. Other
+applications originate from a particular domain, e.g., eLife's RDS comes
+from the life sciences whereas REANA focuses on particle physics. From
+the ten applications, nine support literate programming approaches by
+default, e.g., Jupyter Notebook or R Markdown. Manuscripts supports
+Markdown, but also code execution via embedded Jupyter Notebooks.
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Overview of properties relevant for publishers, i.e., if
+self-hosting is possible (* denotes only self-hosting is possible),
+which license the applications have, the stage of the project (in use or
+beta), and the funding source.}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Self-hosting\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\raggedright
+Open license\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\raggedright
+Stage\strut
+\end{minipage} & \begin{minipage}[b]{0.29\columnwidth}\raggedright
+Funding\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Self-hosting\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\raggedright
+Open license\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\raggedright
+Stage\strut
+\end{minipage} & \begin{minipage}[b]{0.29\columnwidth}\raggedright
+Funding\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Binder\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+BSD 3-Clause ``New'' or ``Revised''\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Nüst, Granell, et al. (2018)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+Moore Foundation, Google Cloud Platform\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Code Ocean\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+no\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Commercial application\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Chitre (2018)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+commercial\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+eLife RDS\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes*\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+MIT\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Lewis et al. (2018)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+Howard Hughes Medic. Inst, Max Planck Society, Wellcome Trust, Knut and
+Alice Wallenberg Foundation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Galaxy\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Academic Free 3.0\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Ide et al. (2016)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+National Institutes of Health, National Science Foundation, Penn State,
+Johns Hopkins, and the Pennsylvania Department of Public Health\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Gigantum\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+no\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+MIT\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+beta\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+commercial\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Manuscripts\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+CPAL-1.0\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+beta\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+no information available\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+o2r\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes*\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+Apache 2.0\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+beta\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+DFG (German Funding Agency)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+REANA\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes*\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+MIT\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Prelipcean (2019)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+CERN, National Science Foundation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+ReproZip\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+BSD 3-Clause ``New'' or ``Revised''\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+in use by Chirigati, Doraiswamy, et al. (2016)\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+Moore and Sloan Foundation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Whole Tale\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+yes\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+BSD 3-Clause ``New'' or ``Revised''\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\raggedright
+beta\strut
+\end{minipage} & \begin{minipage}[t]{0.29\columnwidth}\raggedright
+National Science Foundation\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Seven applications are extensible and provide the possibility to
+configure the application to support further submission formats or
+programming languages. Except for Code Ocean which also supports MATLAB
+and Stata, all applications only support non-proprietary programming
+languages. For making code and data available on the platform, five
+applications provide file upload. Five applications provide the
+possibility to upload materials via an external cloud or repository,
+e.g., Zenodo. However, uploading materials might be disadvantageous for
+papers based on large data files. For these cases, eLife's RDS (based on
+Stencila), REANA, and ReproZip allow local usage. Researchers can also
+work locally with Gigantum, but then need to synchronize with the online
+service to access all features. Despite the importance of licensing, we
+could not find information on copyright for research materials in four
+applications. Whole Tale and Gigantum only allow open licenses whereas
+Code Ocean, Galaxy, and o2r encourage it. eLife assigns an open license
+to the article text only.
+
+\begin{longtable}[]{@{}lllll@{}}
+\caption{Overview of aspects relevant for editors and authors, i.e., the
+addressed research area, which submission formats are supported, how
+authors can upload materials, and copyright.}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Research area\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Submission formats/ Program. languages\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Upload\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Copyright\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright
+Research area\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Submission formats/ Program. languages\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Upload\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Copyright\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Binder\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown, Jupyter Notebooks, extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+via URL/DOI from Git(Hub/Lab), Gist, Zenodo, Figshare, Dataverse\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+no information found\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Code Ocean\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown, Jupyter Notebooks, C/C++, Fortran, Java, Lua, MATLAB, Stata,
+extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+File upload, via URL from Git repository\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+self-determined, MIT for code/ CC0 for data encouraged\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+eLife RDS\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all, focus on life sciences\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown, Jupyter Notebooks, Markdown, Excel, Word, LaTeX, JATS,
+extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+created locally using Stencila\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+CC-BY for text, for code/data not discussed\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Galaxy\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all, focus on life sciences\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+Jupyter Notebooks, extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+File upload, FTP, SRA\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+encourage open license for software\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Gigantum\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown, Jupyter Notebooks\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+Synchronization\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+self-determined but has to be open\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Manuscripts\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+Markdown, Word, Latex, JATS, R, Julia, Python\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+File upload\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+no information found\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+o2r\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all, focus on geosciences\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+File upload, ownCloud\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+self-determined but open is encouraged\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+REANA\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all, focus on particle physics\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+Jupyter Notebooks, extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+created locally\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+no information found\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+ReproZip\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+Jupyter Notebooks, extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+created locally\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+no information found\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Whole Tale\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright
+all\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+R Markdown, Jupyter Notebooks, extensible\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+File upload, URL/DOI from DataOne/ Dataverse, Materials Data
+Facility\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+self-determined but has to be open\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\emph{Table 3} summarizes aspects relevant for reviewers and readers.
+From the ten applications, five provide a keyword-based search for
+papers whereas five do not provide any search feature. o2r provides a
+spatiotemporal search combined with thematic properties, such as
+libraries used in the code. Nine applications provide tools for
+inspecting code and data, six of them by providing an own user interface
+(UI) and three by embedding a programming environment (e.g., JupyterLab,
+RStudio). Though REANA does not provide supportive tools for inspection,
+the materials can be viewed when stored on public repositories, e.g.,
+GitLab. Nine applications provide tools for downloading materials.
+Projects created with REANA can be downloaded if stored on public
+repositories which already provide a download functionality. Eight
+applications allow readers to execute the analysis in the browser on a
+remote server. Gigantum provides a UI running locally, REANA projects
+are executed via the CLI in a remote REANA cloud. Each application
+allows manipulating the code and rerunning it based on a new parameter.
+Most commonly, users can directly manipulate the code in the browser (6
+applications provide this option) or locally (Gigantum). In REANA, users
+can pass new parameter values via the CLI, in ReproZip via the CLI or
+input fields using ReproServer. The o2r platform allows authors to
+configure UI widgets giving reviewers/readers the chance to
+interactively manipulate parameter values, e.g., by using a slider to
+change a model parameter within a certain range.
+
+\begin{longtable}[]{@{}llllll@{}}
+\caption{Overview of features relevant for reviewers and readers, i.e.,
+searching for papers and materials, inspecting code and data,
+downloading materials, executing the analysis, and manipulating the
+code.}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Searching\strut
+\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright
+Inspection\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Download\strut
+\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright
+Execution\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright
+Manipulation\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.12\columnwidth}\raggedright
+\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\raggedright
+Searching\strut
+\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright
+Inspection\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\raggedright
+Download\strut
+\end{minipage} & \begin{minipage}[b]{0.18\columnwidth}\raggedright
+Execution\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright
+Manipulation\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Binder\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of JupyterLab in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Code Ocean\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+keyword-based\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+below article, or in UI of Code Ocean\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+eLife RDS\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+keyword-based\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within article in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Galaxy\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+keyword-based\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of JupyterLab in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Gigantum\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of local installation\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of local installation\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+within UI of local installation\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Manuscripts\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of Manuscripts\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+o2r\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+spatiotemporal and keyword- based search\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of o2r\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+using UI widgets\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+REANA\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+via CLI in remote Reana cloud\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually via CLI\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+ReproZip\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+no support\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of ReproServer\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+locally via CLI, within UI in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually via CLI/input fields in browser\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\raggedright
+Whole Tale\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\raggedright
+keyword-based\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI of JupyterLab/ RStudio in browser\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\raggedright
+via UI\strut
+\end{minipage} & \begin{minipage}[t]{0.18\columnwidth}\raggedright
+within UI in browser or locally\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright
+manually within code in browser\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\emph{Table 4} addresses libraries and other institutions with a mandate
+to preserve and provide access to research outputs. It includes
+information on how the research materials are stored and shared, and
+whether modifying or deleting content once published is possible. Five
+applications provide storage, though it remains unclear whether they run
+the servers by themselves or by third-party services, and what kind of
+backup and archiving is implemented. Seven applications give hosts the
+option to store research materials independently, e.g., on the
+publisher's infrastructure. The free available instance of Binder,
+MyBinder.org (\url{https://mybinder.org/}), stores Docker images
+temporarily but beyond that, no storage is provided. Whole Tale and o2r
+use existing long-term preservation services, e.g., Zenodo and DataOne.
+Regarding the possibility to modify or delete materials once published,
+we assigned ``possible'' if there is any way to do so. In Binder, REANA,
+and ReproZip, modifying/deleting content is possible if the research
+materials are stored on GitHub/Lab, but not when stored on Zenodo. The
+same is true for Galaxy, Gigantum, and Manuscripts, which allow users to
+edit/delete contents stored in the cloud. Code Ocean and Whole Tale
+assign DOIs to published contents making it impossible to edit these
+after publication. The same applies to o2r but only if the materials are
+archived. Finally, in eLife's RDS, the article is composed of text and
+code. Deleting it is thus equivalent to withdrawing a paper. All in all,
+seven applications allow modifying published materials. However, this
+issue is mitigated when researchers ``go the extra mile'' and also
+publish their materials in long-term repositories, such as Zenodo. One
+exception is Code Ocean which allows modifications (no deletions) but
+assigns a new DOI to the modified content. Finally, authors need a way
+to share reproducible results in their paper. This is possible via a
+URL/DOI to the application (eight applications provide this possibility)
+or a URL to an online repository (2).
+
+\begin{longtable}[]{@{}llll@{}}
+\caption{Overview of properties relevant for long-term preservation,
+i.e., how the research materials are stored, if they can be
+modified/deleted after publication, and how they can be shared in
+articles.}\tabularnewline
+\toprule
+& Storing & Modify/Delete after publication & Sharing\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+& Storing & Modify/Delete after publication & Sharing\tabularnewline
+\midrule
+\endhead
+Binder & by host & possible & URL to Binder instance\tabularnewline
+Code Ocean & provided & not possible & URL/DOI to Code
+Ocean\tabularnewline
+eLife RDS & by host & not possible & URL/DOI to eLife\tabularnewline
+Galaxy & provided, by host & possible & URL to Galaxy\tabularnewline
+Gigantum & provided & possible & URL to Gigantum\tabularnewline
+Manuscripts & provided, by host & possible & URL to
+Manuscripts\tabularnewline
+o2r & by host, Zenodo & possible & URL to o2r\tabularnewline
+REANA & by host & possible & URL to online repository\tabularnewline
+ReproZip & provided, by host & possible & URL to
+ReproServer\tabularnewline
+Whole Tale & DataOne & not possible & DOI to DataOne\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+Several projects develop applications for publishing computational
+research. One might think the applications, since they all strive for
+the same overall goal, resemble each other. However, the overview in
+this paper (see \emph{Tables 1-4}) shows that the applications address
+different issues and needs. This increases the chances for stakeholders
+to find a suitable application for their individual requirements.
+
+\hypertarget{needs-of-stakeholders}{%
+\subsection{Needs of stakeholders}\label{needs-of-stakeholders}}
+
+\textbf{Publishers:} A critical decision is whether publishers want to
+host an infrastructure by themselves or engage a provider. Applications
+exist for both approaches though the majority of them allow
+self-hosting. Accordingly, all self-hosting solutions have an open
+license enabling operators to create customized versions of the
+platforms and the peer review process. A further advantage is the
+mitigation of risks regarding vendor lock-in or grant-based projects
+which expire at some point.
+
+Nevertheless, it remains unclear which costs publishers have to expect
+when hosting an infrastructure. The final costs strongly depend on the
+number of views and execution attempts, workflow sizes, and manipulation
+options. These parameters differ between use cases and could be the
+basis for future research, e.g., on stress tests. Therefore, the metrics
+of existing publications might provide first insights to calculate the
+required resources. The Binder instance MyBinder.org provides an initial
+estimate regarding costs
+(\url{https://mybinder.org/v2/gh/jupyterhub/binder-billing/master?urlpath=lab/tree/analyze_data.ipynb}).
+However, further data on infrastructure costs from the other services
+would help to calculate costs in a more accurate way, albeit this
+transparency is only realistic for non-profit projects.
+
+Working with applications that are already in use and those in a beta
+stage can both have advantages and disadvantages. While applications
+already in use provide initial evidence that they work, it might take
+more effort to make adjustments in order to fit the publisher's
+infrastructure. In contrast, applications in a beta stage can adjust
+their feature set and consider new contributions without worrying about
+running instances and backwards compatibility, but the deployment of the
+applications might reveal new issues.
+
+\textbf{Editors and authors:} The research area does not narrow down the
+number of options. Although some applications come from specific
+domains, e.g., the life sciences, none of them is restricted to a
+specific field. Regarding submission formats, there is a trend towards
+literate programming approaches. Most applications either support
+Jupyter Notebook or R Markdown which both have proven to support
+reproducibility (Grüning et al. 2018). However, some journals and
+publishers have particular requirements, e.g., they rely on LaTeX. Since
+transformations to other document types are often cumbersome and
+shifting author requirements can be a lengthy process, it might be
+easier to have reproducible documents as a supplement, potentially for a
+transition period until the executable documents are widely accepted.
+Nevertheless, eLife's RDS shows that a scientific article combining
+executable code with narrative is possible today and comes with
+advantages with respect to communicating scientific results, e.g.,
+studying text and analysis in parallel while also being able to
+manipulate the analysis.
+
+A critical issue is that not all applications explicitly handle the
+copyright of the shared materials. Those who do, fortunately, either
+require or encourage open licenses. Licensing is important to enable
+reusability and thus a recommendation mentioned frequently in papers
+discussing reproducibility guidelines (Nosek et al. 2015; Stodden 2009).
+Therefore, the platforms should inform users about licenses, e.g., by
+referring to existing advising resources (e.g.,
+\url{https://choosealicense.com/}) and ideally require open licenses.
+
+A further limitation of the applications is that the anonymity of the
+authors is not guaranteed during the review process. All applications
+require an account for creating reproducible results and the name of the
+creator is usually visible making double-blind review impossible.
+However, access to code and data is particularly important for
+reviewers, since they decide on accepting or rejecting a submission. One
+solution might be to create an anonymous version of the materials, as it
+is possible with Open Science Framework
+(\url{https://help.osf.io/hc/en-us/articles/360019930333-Create-a-View-only-Link-for-a-Project})
+or to adopt an open peer-review process.
+
+\textbf{Reviewers and readers:} Being able to reproduce computational
+results in a paper is a clear benefit. However, open reproducible
+research comes with a number of further incentives with respect to
+finding and inspecting papers (Munafò et al. 2017). Most search tools
+provided by the applications do not take full advantage of the
+information contained in code and data files, e.g., spatiotemporal
+properties. Instead, they either provide a keyword-based search or no
+search at all. For inspecting materials, most solutions either provide
+their own UI or integrate a development environment, e.g., JupyterLab,
+RStudio. In both cases, users can directly access, manipulate, and reuse
+the code. However, readers might still need to understand complex code
+scripts. Moreover, identifying specific parameters buried in the code
+and finding out how to change these can be a daunting task. The concept
+of nano-publications (Kuhn et al. 2016) or bindings (Konkol, Kray, and
+Suleiman 2019) might help to solve these issues. A further need in this
+context is a UI for comparing original and manipulated figures since
+differences in the figure after changing parameters might be difficult
+to spot. Most applications do not provide any support for substituting
+research components, e.g., the input datasets. This might be due to the
+plethora of complex interoperability issues with respect to data formats
+or column names in tabular data. Only ReproZip (Chirigati, Rampin, et
+al. 2016) and o2r (Konkol and Kray 2018) provide basic means to
+substitute input datasets, yet they require users to ensure
+compatibility.
+
+\textbf{Librarians:} The state of the research materials is an essential
+issue when it comes to publication. While some applications fix the
+state of the research materials by assigning a DOI and archiving a
+snapshot, others allow changing and deleting them. This is a
+disadvantage with respect to reproducibility since verifiability and
+accessibility are not given anymore. In addition, if self-hosting is not
+possible, the computational analysis of an article will be executable
+only as long as the project and its infrastructure exist. This
+dependence is a crucial aspect with respect to archiving. A further
+dependence is the fundamental technology. Without Docker, a Dockerfile
+cannot be run anymore but it is still readable and provides important
+machine- and human-readable information on how to run the analysis. This
+is also true for source code scripts which are plain text files and thus
+can be opened using any editor. These examples demonstrate the
+importance of using open and text-based instead of proprietary and
+binary file formats in science. Due to these issues, researchers should
+consider archiving the research materials on platforms, such as Zenodo
+in addition to an executable version (which should be the same version)
+using one of the applications.
+
+\hypertarget{limitations}{%
+\subsection{Limitations}\label{limitations}}
+
+This work is subject to a number of limitations. The scope of the paper
+is narrow and does not cover all applications that support the
+publication of computational research (e.g., workflow system, such as
+Taverna). In addition, the information in this review paper might become
+outdated quickly but having a structured overview can still be helpful
+for the involved stakeholders to decide on a technology. Finally, the
+properties we investigated in this survey are certainly not complete.
+Still, stakeholders requiring more information can use the overview as a
+starting point for further research.
+
+\hypertarget{conclusions}{%
+\section{Conclusions}\label{conclusions}}
+
+Open science is on the rise and obtains more attention and expressions
+of support from all stakeholders including publishers, editors,
+reviewers, authors, readers, and institutions responsible for archiving,
+e.g., libraries. Despite these developments, publishing computational
+results reproducibly is still a challenge for all parties involved in
+scholarly communication. Fortunately, several projects aim at tackling
+these issues by designing applications to support the publication of
+executable research results. The key contribution of this paper is an
+overview of these applications, their commonalities, and differences.
+This overview can be used as a decision support for publishers facing
+the question of whether to host an application by themselves, for
+editors who want to ensure that the application is conform with the
+author and reviewer guidelines, for authors who want to create
+reproducible analyses efficiently, and for reviewers who want to verify
+the results and to suggest potential solutions during the review
+process. Moreover, the overview considers the needs of readers who want
+to better understand and reuse research materials, such as code scripts
+and data. Finally, the survey contains aspects relevant for archiving.
+The applications all provide a rich set of functionalities and address
+many reproducibility issues. However, issues related to ethics, privacy,
+big data, and long computation times are not fully solved, yet. Beyond
+these challenges, considering executable submissions already during the
+review process comes with a number of novel research questions: How many
+reviewers try to reproduce submissions using one of the applications?
+How does a reproducibility attempt (whether it failed or succeeded)
+affect a reviewer's decision? Is the effort required for reviewing
+reproducible papers the same as for a traditional article (i.e., only
+reading the text), or will reviewers refuse reviews since they fear
+additional work? And finally, how much time does it take to review a
+paper supplemented by reproducible documents and how much additional
+understanding do reviewers obtain? These quantitative (time, user
+interactions) and qualitative (interviews, questionnaires) measures can
+help to improve the applications and eventually foster the success of
+open reproducible research.
+
+\hypertarget{data-and-software-availability}{%
+\section{Data and Software
+Availability}\label{data-and-software-availability}}
+
+The data and code used to create the tables are openly available on
+GitHub: \url{https://github.com/o2r-project/reviewpaper}. The table
+allows substituting the input dataset by an updated record. The
+repository includes a list of all projects we looked and the reason for
+why we excluded some of them. A snapshot of the repository at the time
+of submission is available on Zenodo:
+\url{https://doi.org/10.5281/zenodo.3562270}.
+
+\hypertarget{author-contributions}{%
+\section{Author Contributions}\label{author-contributions}}
+
+Markus Konkol wrote the paper, collected the data, and conceptualized
+the analysis. Daniel Nüst wrote the paper. Laura Goullier collected data
+and wrote the paper. All authors discussed the results and approved the
+final manuscript.
+
+\hypertarget{competing-interests}{%
+\section{Competing Interests}\label{competing-interests}}
+
+The authors of this paper are members of the o2r project that was also
+discussed in this paper (\url{http://o2r.info/}).
+
+\hypertarget{funding}{%
+\section{Funding}\label{funding}}
+
+This work is supported by the project Opening Reproducible Research 2
+(\url{https://www.uni-muenster.de/forschungaz/project/12343}) funded by
+the German Research Foundation (DFG) under project numbers KR 3930/8-1;
+TR 864/12-1; PE 1632/17-1. The funders had no role in study design, data
+collection and analysis, decision to publish, or preparation of the
+manuscript.
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-ahn2013overcoming}{}%
+Ahn, Dong H., Gregory L. Lee, Ganesh Gopalakrishnan, Zvonimir Rakamarić,
+Martin Schulz, and Ignacio Laguna. 2013. ``Overcoming Extreme-Scale
+Reproducibility Challenges Through a Unified, Targeted, and Multilevel
+Toolset.'' In \emph{Proceedings of the 1st International Workshop on
+Software Engineering for High Performance Computing in Computational
+Science and Engineering}, 41--44. SE-Hpccse '13. New York, NY, USA: ACM.
+\url{https://doi.org/10.1145/2532352.2532357}.
+
+\leavevmode\hypertarget{ref-bailey2016facilitating}{}%
+Bailey, David H., Jonathan M. Borwein, and Victoria Stodden. 2016.
+\emph{Facilitating Reproducibility in Scientific Computing: Principles
+and Practice}. John Wiley \& Sons, Inc.
+\url{https://doi.org/10.1002/9781118865064.ch9}.
+
+\leavevmode\hypertarget{ref-barba2018terminologies}{}%
+Barba, Lorena A. 2018. ``Terminologies for Reproducible Research.''
+
+\leavevmode\hypertarget{ref-baumer2014r}{}%
+Baumer, Ben, Mine Cetinkaya-Rundel, Andrew Bray, Linda Loi, and Nicholas
+J Horton. 2014. ``R Markdown: Integrating a Reproducible Analysis Tool
+into Introductory Statistics.'' \emph{arXiv Preprint arXiv:1402.1894}.
+
+\leavevmode\hypertarget{ref-Boettiger2015}{}%
+Boettiger, Carl. 2015. ``An Introduction to Docker for Reproducible
+Research.'' \emph{ACM SIGOPS Operating Systems Review} 49 (1).
+Association for Computing Machinery (ACM): 71--79.
+\url{https://doi.org/10.1145/2723872.2723882}.
+
+\leavevmode\hypertarget{ref-brinckman2019computing}{}%
+Brinckman, Adam, Kyle Chard, Niall Gaffney, Mihael Hategan, Matthew B.
+Jones, Kacper Kowalik, Sivakumar Kulasekaran, et al. 2019. ``Computing
+Environments for Reproducibility: Capturing the ``Whole Tale''.''
+\emph{Future Generation Computer Systems} 94. Elsevier BV: 854--67.
+\url{https://doi.org/10.1016/j.future.2017.12.029}.
+
+\leavevmode\hypertarget{ref-chen2019open}{}%
+Chen, Xiaoli, Sünje Dallmeier-Tiessen, Robin Dasler, Sebastian Feger,
+Pamfilos Fokianos, Jose Benito Gonzalez, Harri Hirvonsalo, et al. 2018.
+``Open Is Not Enough.'' \emph{Nature Physics} 15 (2). Nature Publishing
+Group: 113--19. \url{https://doi.org/10.1038/s41567-018-0342-2}.
+
+\leavevmode\hypertarget{ref-chirigati2016data}{}%
+Chirigati, Fernando, Harish Doraiswamy, Theodoros Damoulas, and Juliana
+Freire. 2016. ``Data Polygamy.'' In \emph{Proceedings of the 2016
+International Conference on Management of Data - SIGMOD 16}. ACM Press.
+\url{https://doi.org/10.1145/2882903.2915245}.
+
+\leavevmode\hypertarget{ref-chirigati2016reprozip}{}%
+Chirigati, Fernando, Rémi Rampin, Dennis Shasha, and Juliana Freire.
+2016. ``Reprozip: Computational Reproducibility with Ease.'' In
+\emph{Proceedings of the 2016 International Conference on Management of
+Data}, 2085--8. ACM. \url{https://doi.org/10.1145/2882903.2899401}.
+
+\leavevmode\hypertarget{ref-chitre2018editorial}{}%
+Chitre, Mandar. 2018. ``Editorial on Writing Reproducible and
+Interactive Papers.'' \emph{IEEE Journal of Oceanic Engineering} 43 (3).
+Institute of Electrical; Electronics Engineers (IEEE): 560--62.
+\url{https://doi.org/10.1109/joe.2018.2848058}.
+
+\leavevmode\hypertarget{ref-clyburne2019computational}{}%
+Clyburne-Sherin, April, Xu Fei, and Seth Ariel Green. 2019.
+``Computational Reproducibility via Containers in Social Psychology.''
+\emph{Meta-Psychology} 3. Center for Open Science: 1--9.
+\url{https://doi.org/10.15626/MP.2018.892}.
+
+\leavevmode\hypertarget{ref-donoho2010invitation}{}%
+Donoho, D. L. 2010. ``An Invitation to Reproducible Computational
+Research.'' \emph{Biostatistics} 11 (3). Oxford University Press (OUP):
+385--88. \url{https://doi.org/10.1093/biostatistics/kxq028}.
+
+\leavevmode\hypertarget{ref-eglen2019}{}%
+Eglen, Stephen, and Daniel Nüst. 2019. ``CODECHECK: An Open-Science
+Initiative to Facilitate Sharing of Computer Programs and Results
+Presented in Scientific Publications.'' \emph{The 14th Munin Conference
+on Scholarly Publishing}. \url{https://doi.org/10.7557/5.4910}.
+
+\leavevmode\hypertarget{ref-Fenner_2016}{}%
+Fenner, Martin, Mercè Crosas, Jeffrey Grethe, David Kennedy, Henning
+Hermjakob, Philippe Rocca-Serra, Gustavo Durand, et al. 2016. ``A Data
+Citation Roadmap for Scholarly Data Repositories,'' December. Cold
+Spring Harbor Laboratory. \url{https://doi.org/10.1101/097196}.
+
+\leavevmode\hypertarget{ref-foster2018research}{}%
+Foster, Ian. 2017. ``Research Infrastructure for the Safe Analysis of
+Sensitive Data.'' \emph{The ANNALS of the American Academy of Political
+and Social Science} 675 (1). SAGE Publications: 102--20.
+\url{https://doi.org/10.1177/0002716217742610}.
+
+\leavevmode\hypertarget{ref-gentleman2007statistical}{}%
+Gentleman, Robert, and Duncan Temple Lang. 2007. ``Statistical Analyses
+and Reproducible Research.'' \emph{Journal of Computational and
+Graphical Statistics} 16 (1). Informa UK Limited: 1--23.
+\url{https://doi.org/10.1198/106186007x178663}.
+
+\leavevmode\hypertarget{ref-goecks2010galaxy}{}%
+Goecks, Jeremy, Anton Nekrutenko, James Taylor, and The Galaxy Team.
+2010. ``Galaxy: A Comprehensive Approach for Supporting Accessible,
+Reproducible, and Transparent Computational Research in the Life
+Sciences.'' \emph{Genome Biology} 11 (8). Springer Nature: R86.
+\url{https://doi.org/10.1186/gb-2010-11-8-r86}.
+
+\leavevmode\hypertarget{ref-greenbaum2017structuring}{}%
+Greenbaum, Dov, Joel Rozowsky, Victoria Stodden, and Mark Gerstein.
+2017. ``Structuring Supplemental Materials in Support of
+Reproducibility.'' \emph{Genome Biology} 18 (1). Springer Nature.
+\url{https://doi.org/10.1186/s13059-017-1205-3}.
+
+\leavevmode\hypertarget{ref-gruning2017jupyter}{}%
+Grüning, Björn A., Eric Rasche, Boris Rebolledo-Jaramillo, Carl
+Eberhard, Torsten Houwaart, John Chilton, Nate Coraor, Rolf Backofen,
+James Taylor, and Anton Nekrutenko. 2017. ``Jupyter and Galaxy: Easing
+Entry Barriers into Complex Data Analyses for Biomedical Researchers.''
+Edited by Francis Ouellette. \emph{PLOS Computational Biology} 13 (5).
+Public Library of Science (PLoS): e1005425.
+\url{https://doi.org/10.1371/journal.pcbi.1005425}.
+
+\leavevmode\hypertarget{ref-Gr_ning_2018}{}%
+Grüning, Björn, John Chilton, Johannes Köster, Ryan Dale, Nicola
+Soranzo, Marius van den Beek, Jeremy Goecks, Rolf Backofen, Anton
+Nekrutenko, and James Taylor. 2018. ``Practical Computational
+Reproducibility in the Life Sciences.'' \emph{Cell Systems} 6 (6).
+Elsevier BV: 631--35. \url{https://doi.org/10.1016/j.cels.2018.03.014}.
+
+\leavevmode\hypertarget{ref-herndon2014does}{}%
+Herndon, T., M. Ash, and R. Pollin. 2013. ``Does High Public Debt
+Consistently Stifle Economic Growth? A Critique of Reinhart and
+Rogoff.'' \emph{Cambridge Journal of Economics} 38 (2). Oxford
+University Press (OUP): 257--79.
+\url{https://doi.org/10.1093/cje/bet075}.
+
+\leavevmode\hypertarget{ref-howe2012}{}%
+Howe, Bill. 2012. ``Virtual Appliances, Cloud Computing, and
+Reproducible Research.'' \emph{Computing in Science \& Engineering} 14
+(4). Institute of Electrical; Electronics Engineers (IEEE): 36--41.
+\url{https://doi.org/10.1109/mcse.2012.62}.
+
+\leavevmode\hypertarget{ref-hrynaszkiewicz2019publishers}{}%
+Hrynaszkiewicz, Iain. 2019. \emph{Publishers' Responsibilities in
+Promoting Data Quality and Reproducibility}. Springer Berlin Heidelberg.
+\url{https://doi.org/10.1007/164_2019_290}.
+
+\leavevmode\hypertarget{ref-ide2015language}{}%
+Ide, Nancy, Keith Suderman, Marc Verhagen, and James Pustejovsky. 2016.
+``The Language Application Grid Web Service Exchange Vocabulary.'' In
+\emph{Worldwide Language Service Infrastructure}, edited by Yohei
+Murakami and Donghui Lin, 18--32. Cham: Springer International
+Publishing. \url{https://doi.org/10.1007/978-3-319-31468-6_2}.
+
+\leavevmode\hypertarget{ref-jupyter2018binder}{}%
+Jupyter, Project, Matthias Bussonnier, Jessica Forde, Jeremy Freeman,
+Brian Granger, Tim Head, Chris Holdgraf, et al. 2018. ``Binder 2.0 -
+Reproducible, Interactive, Sharable Environments for Science at Scale.''
+In \emph{Proceedings of the 17th Python in Science Conference}. SciPy.
+\url{https://doi.org/10.25080/majora-4af1f417-011}.
+
+\leavevmode\hypertarget{ref-kluyver2016jupyter}{}%
+Kluyver, Thomas, Benjamin Ragan-Kelley, Fernando Pérez, Brian E Granger,
+Matthias Bussonnier, Jonathan Frederic, Kyle Kelley, et al. 2016.
+``Jupyter Notebooks-a Publishing Format for Reproducible Computational
+Workflows.'' In \emph{Proceedings of the 20th International Conference
+on Electronic Publishing}, 87--90.
+
+\leavevmode\hypertarget{ref-knuth1984literate}{}%
+Knuth, D. E. 1984. ``Literate Programming.'' \emph{The Computer Journal}
+27 (2). Oxford University Press (OUP): 97--111.
+\url{https://doi.org/10.1093/comjnl/27.2.97}.
+
+\leavevmode\hypertarget{ref-konkol2019depth}{}%
+Konkol, Markus, and Christian Kray. 2018. ``In-Depth Examination of
+Spatiotemporal Figures in Open Reproducible Research.''
+\emph{Cartography and Geographic Information Science} 46 (5). Informa UK
+Limited: 412--27. \url{https://doi.org/10.1080/15230406.2018.1512421}.
+
+\leavevmode\hypertarget{ref-konkol2019computational}{}%
+Konkol, Markus, Christian Kray, and Max Pfeiffer. 2018. ``Computational
+Reproducibility in Geoscientific Papers: Insights from a Series of
+Studies with Geoscientists and a Reproduction Study.''
+\emph{International Journal of Geographical Information Science} 33 (2).
+Informa UK Limited: 408--29.
+\url{https://doi.org/10.1080/13658816.2018.1508687}.
+
+\leavevmode\hypertarget{ref-konkol2019creating}{}%
+Konkol, Markus, Christian Kray, and Jan Suleiman. 2019. ``Creating
+Interactive Scientific Publications Using Bindings.'' \emph{Proceedings
+of the ACM on Human-Computer Interaction} 3 (EICS). Association for
+Computing Machinery (ACM): 1--18. \url{https://doi.org/10.1145/3331158}.
+
+\leavevmode\hypertarget{ref-kuhn2016decentralized}{}%
+Kuhn, Tobias, Christine Chichester, Michael Krauthammer, Núria
+Queralt-Rosinach, Ruben Verborgh, George Giannakopoulos, Axel-Cyrille
+Ngonga Ngomo, Raffaele Viglianti, and Michel Dumontier. 2016.
+``Decentralized Provenance-Aware Publishing with Nanopublications.''
+\emph{PeerJ Computer Science} 2. PeerJ: e78.
+\url{https://doi.org/10.7717/peerj-cs.78}.
+
+\leavevmode\hypertarget{ref-lewis2018replication}{}%
+Lewis, L Michelle, Meredith C Edwards, Zachary R Meyers, C Conover
+Talbot Jr, Haiping Hao, David Blum, and others. 2018. ``Replication
+Study: Transcriptional Amplification in Tumor Cells with Elevated
+c-Myc.'' \emph{Cancer Biology} 7. eLife Sciences Publications Limited:
+e30274. \url{https://doi.org/10.7554/eLife.30274}.
+
+\leavevmode\hypertarget{ref-markowetz2015five}{}%
+Markowetz, Florian. 2015. ``Five Selfish Reasons to Work Reproducibly.''
+\emph{Genome Biology} 16 (1). Springer Science; Business Media LLC.
+\url{https://doi.org/10.1186/s13059-015-0850-7}.
+
+\leavevmode\hypertarget{ref-morin2012shining}{}%
+Morin, A., J. Urban, P. D. Adams, I. Foster, A. Sali, D. Baker, and P.
+Sliz. 2012. ``Shining Light into Black Boxes.'' \emph{Science} 336
+(6078). American Association for the Advancement of Science (AAAS):
+159--60. \url{https://doi.org/10.1126/science.1218263}.
+
+\leavevmode\hypertarget{ref-munafo2017manifesto}{}%
+Munafò, Marcus R, Brian A Nosek, Dorothy VM Bishop, Katherine S Button,
+Christopher D Chambers, Nathalie Percie Du Sert, Uri Simonsohn, Eric-Jan
+Wagenmakers, Jennifer J Ware, and John PA Ioannidis. 2017. ``A Manifesto
+for Reproducible Science.'' \emph{Nature Human Behaviour} 1 (1). Nature
+Publishing Group: 0021. \url{https://doi.org/10.1038/s41562-016-0021}.
+
+\leavevmode\hypertarget{ref-national2019reproducibility}{}%
+National Academies of Sciences, Engineering, Medicine, and others. 2019.
+\emph{Reproducibility and Replicability in Science}. National Academies
+Press.
+
+\leavevmode\hypertarget{ref-Nosek1422}{}%
+Nosek, B. A., G. Alter, G. C. Banks, D. Borsboom, S. D. Bowman, S. J.
+Breckler, S. Buck, et al. 2015. ``Promoting an Open Research Culture.''
+\emph{Science} 348 (6242). American Association for the Advancement of
+Science: 1422--5. \url{https://doi.org/10.1126/science.aab2374}.
+
+\leavevmode\hypertarget{ref-nust_daniel2018}{}%
+Nüst, Daniel. 2018. \emph{Reproducibility Service for Executable
+Research Compendia: Technical Specifications and Reference
+Implementation} (version 1.0.0). Zenodo.
+\url{https://doi.org/10.5281/zenodo.2203844}.
+
+\leavevmode\hypertarget{ref-nust2018reproducible}{}%
+Nüst, Daniel, Carlos Granell, Barbara Hofer, Markus Konkol, Frank O.
+Ostermann, Rusne Sileryte, and Valentina Cerutti. 2018. ``Reproducible
+Research and GIScience: An Evaluation Using AGILE Conference Papers.''
+\emph{PeerJ} 6. PeerJ: e5072. \url{https://doi.org/10.7717/peerj.5072}.
+
+\leavevmode\hypertarget{ref-nust2019containerit}{}%
+Nüst, Daniel, and Matthias Hinz. 2019. ``Containerit: Generating
+Dockerfiles for Reproducible Research with R.'' \emph{Journal of Open
+Source Software} 4 (40). The Open Journal: 1603.
+\url{https://doi.org/10.21105/joss.01603}.
+
+\leavevmode\hypertarget{ref-nust2017opening}{}%
+Nüst, Daniel, Markus Konkol, Edzer Pebesma, Christian Kray, Marc
+Schutzeichel, Holger Przibytzin, and Jörg Lorenz. 2017. ``Opening the
+Publication Process with Executable Research Compendia.'' \emph{D-Lib
+Magazine} 23 (1/2). CNRI Acct.
+\url{https://doi.org/10.1045/january2017-nuest}.
+
+\leavevmode\hypertarget{ref-nuest2019agile}{}%
+Nüst, Daniel, Frank O Ostermann, Rusne Sileryte, Barbara Hofer, Carlos
+Granell, Marta Teperek, Anita Graser, Karl W Broman, and Kristina M
+Hettne. 2019. ``AGILE Reproducible Paper Guidelines.''
+\url{https://doi.org/10.17605/OSF.IO/CB7Z8}.
+
+\leavevmode\hypertarget{ref-Park_2019}{}%
+Park, Hyoungjoo, and Dietmar Wolfram. 2019. ``Research Software Citation
+in the Data Citation Index: Current Practices and Implications for
+Research Software Sharing and Reuse.'' \emph{Journal of Informetrics} 13
+(2). Elsevier BV: 574--82.
+\url{https://doi.org/10.1016/j.joi.2019.03.005}.
+
+\leavevmode\hypertarget{ref-edzer2013}{}%
+Pebesma, Edzer. 2013. ``Earth and Planetary Innovation Challenge.''
+\emph{Earth and Planetary Innovation Challenge}. Elsevier.
+\url{http://pebesma.staff.ifgi.de/epic.pdf}.
+
+\leavevmode\hypertarget{ref-Perkel_2019}{}%
+Perkel, Jeffrey M. 2019. ``Make Code Accessible with These Cloud
+Services.'' \emph{Nature} 575 (7781). Springer Science; Business Media
+LLC: 247--48. \url{https://doi.org/10.1038/d41586-019-03366-x}.
+
+\leavevmode\hypertarget{ref-perignon2019certify}{}%
+Pérignon, Christophe, Kamel Gadouche, Christophe Hurlin, Roxane
+Silberman, and Eric Debonnel. 2019. ``Certify Reproducibility with
+Confidential Data.'' \emph{Science} 365 (6449). American Association for
+the Advancement of Science: 127--28.
+\url{https://doi.org/10.1126/science.aaw2825}.
+
+\leavevmode\hypertarget{ref-piwowar2007sharing}{}%
+Piwowar, Heather, and Heather Piwowar. 2007. ``Sharing Detailed Research
+Data Is Associated with Increased Citation Rate.'' \emph{Nature
+Precedings}. Springer Nature.
+\url{https://doi.org/10.1038/npre.2007.361}.
+
+\leavevmode\hypertarget{ref-powers2019open}{}%
+Powers, Stephen M., and Stephanie E. Hampton. 2018. ``Open Science,
+Reproducibility, and Transparency in Ecology.'' \emph{Ecological
+Applications} 29 (1). Wiley: e01822.
+\url{https://doi.org/10.1002/eap.1822}.
+
+\leavevmode\hypertarget{ref-prelipcean2019physics}{}%
+Prelipcean, Daniel. 2019. ``Physics Examples for Reproducible
+Analysis.'' CERN. \url{https://cds.cern.ch/record/2690231}.
+
+\leavevmode\hypertarget{ref-rampin2018reproserver}{}%
+Rampin, Remi, Fernando Chirigati, Vicky Steeves, and Juliana Freire.
+2018. ``ReproServer: Making Reproducibility Easier and Less Intensive.''
+\emph{arXiv Preprint arXiv:1808.01406}.
+
+\leavevmode\hypertarget{ref-rule2019ten}{}%
+Rule, Adam, Amanda Birmingham, Cristal Zuniga, Ilkay Altintas,
+Shih-Cheng Huang, Rob Knight, Niema Moshiri, et al. 2019. ``Ten Simple
+Rules for Writing and Sharing Computational Analyses in Jupyter
+Notebooks.'' Edited by Fran Lewitter. \emph{PLOS Computational Biology}
+15 (7). Public Library of Science (PLoS): e1007007.
+\url{https://doi.org/10.1371/journal.pcbi.1007007}.
+
+\leavevmode\hypertarget{ref-sandve2013ten}{}%
+Sandve, Geir Kjetil, Anton Nekrutenko, James Taylor, and Eivind Hovig.
+2013. ``Ten Simple Rules for Reproducible Computational Research.''
+Edited by Philip E. Bourne. \emph{PLoS Computational Biology}. Public
+Library of Science (PLoS).
+\url{https://doi.org/10.1371/journal.pcbi.1003285}.
+
+\leavevmode\hypertarget{ref-stagge2019assessing}{}%
+Stagge, James H., David E. Rosenberg, Adel M. Abdallah, Hadia Akbar,
+Nour A. Attallah, and Ryan James. 2019. ``Assessing Data Availability
+and Research Reproducibility in Hydrology and Water Resources.''
+\emph{Scientific Data} 6 (1). Springer Science; Business Media LLC.
+\url{https://doi.org/10.1038/sdata.2019.30}.
+
+\leavevmode\hypertarget{ref-stark2018before}{}%
+Stark, Philip B. 2018. ``Before Reproducibility Must Come
+Preproducibility.'' \emph{Nature} 557 (7707). Springer Science; Business
+Media LLC: 613--13. \url{https://doi.org/10.1038/d41586-018-05256-0}.
+
+\leavevmode\hypertarget{ref-steeves2018using}{}%
+Steeves, Vicky, Rémi Rampin, and Fernando Chirigati. 2017. ``Using
+ReproZip for Reproducibility and Library Services.'' \emph{IASSIST
+Quarterly} 42 (1). University of Alberta Libraries: 14.
+\url{https://doi.org/10.29173/iq18}.
+
+\leavevmode\hypertarget{ref-stodden2008legal}{}%
+Stodden, Victoria. 2009. ``The Legal Framework for Reproducible
+Scientific Research: Licensing and Copyright.'' \emph{Computing in
+Science \& Engineering} 11 (1). Institute of Electrical; Electronics
+Engineers (IEEE): 35--40. \url{https://doi.org/10.1109/mcse.2009.19}.
+
+\leavevmode\hypertarget{ref-stodden2016enhancing}{}%
+Stodden, V., M. McNutt, D. H. Bailey, E. Deelman, Y. Gil, B. Hanson, M.
+A. Heroux, J. P. A. Ioannidis, and M. Taufer. 2016. ``Enhancing
+Reproducibility for Computational Methods.'' \emph{Science} 354 (6317).
+American Association for the Advancement of Science (AAAS): 1240--1.
+\url{https://doi.org/10.1126/science.aah6168}.
+
+\leavevmode\hypertarget{ref-vsimko2019reana}{}%
+Šimko, Tibor, Lukas Heinrich, Harri Hirvonsalo, Dinos Kousidis, and
+Diego Rodrı'guez. 2019. ``REANA: A System for Reusable Research Data
+Analyses.'' In \emph{EPJ Web of Conferences}, edited by A. Forti, L.
+Betev, M. Litmaath, O. Smirnova, and P. Hristov, 214:06034. EDP
+Sciences. \url{https://doi.org/10.1051/epjconf/201921406034}.
+
+\leavevmode\hypertarget{ref-wolstencroft2013taverna}{}%
+Wolstencroft, Katherine, Robert Haines, Donal Fellows, Alan Williams,
+David Withers, Stuart Owen, Stian Soiland-Reyes, et al. 2013. ``The
+Taverna Workflow Suite: Designing and Executing Workflows of Web
+Services on the Desktop, Web or in the Cloud.'' \emph{Nucleic Acids
+Research} 41 (W1). Oxford University Press (OUP): W557--W561.
+\url{https://doi.org/10.1093/nar/gkt328}.
+
+
+\end{document}
