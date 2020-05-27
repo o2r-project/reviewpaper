@@ -1,0 +1,41 @@
+---
+title: "Publishing computational research -- A review of infrastructures for reproducible and transparent scholarly communication"
+preprint: true
+author: 
+  - "Markus Konkol (m.konkol [at] uni-muenster [dot] de), Daniel Nüst, Laura Goulier (Institute for Geoinformatics, University\\ of\\ Münster, Münster,\\ Germany)"
+abstract: >
+ __Background__ The trend toward open science increases the pressure on authors to provide access to the source code and data they used to compute the results reported in their scientific papers. Since sharing materials reproducibly is challenging, several projects have developed solutions to support the release of executable analyses alongside articles.<br/>
+ __Methods__ We reviewed eleven applications that can assist researchers in adhering to reproducibility principles. The applications were found through a literature search and interactions with the reproducible research community. An application was included in our analysis if it (i) was actively maintained at the time the data for this paper was collected, (ii) supports the publication of executable code and data, (iii) is connected to the scholarly publication process. By investigating the software documentation and published articles, we compared the applications across 19 criteria, such as deployment options and features that support authors in creating and readers in studying executable papers.<br/>
+ __Results__ From the eleven applications, eight allow publishers to self-host the system for free, whereas three provide paid services. Executable analyses are predominantly submitted using literate programming approaches: Ten applications support Jupyter Notebooks or R Markdown documents. All approaches provide features for readers, e.g., one-click reproducible results or tools for manipulating the analysis parameters. Six applications allow for modifying materials after publication.<br/>
+ __Conclusions__ This paper surveys the features provided by certain applications to assist in reproducible research and describes their limitations while considering stakeholders involved in scholarly communication. For example, publishers can opt for a paid service or host an infrastructure by themselves, but there is not much data on the costs of running one’s own service. Further, executable documents might require editors to change the journal guidelines and adjust the review process. From the author’s view, there are already open platforms authors can use today, e.g., as supplements. The ability to modify published content is beneficial for authors’ ongoing projects, but it might become unclear which version was used in the paper. Finally, considering readers, readers can obtain tools to execute and manipulate the computational analysis, but they might need to cope with complex code. 
+increasinglyheader-includes: >
+ \setlength{\columnsep}{18pt}
+ \usepackage{url}
+ \usepackage{breakurl}
+ \PassOptionsToPackage{hyperindex,breaklinks}{hyperref}
+ \usepackage{caption}
+ \captionsetup{width=5in}
+bibliography: mybibfile.bib
+output: html_document
+---
+
+|Application|Description|
+|-|------|
+| Authorea| In Authorea, authors can create executable papers collaboratively. They can attach code and data to figures to make them reproducible. Authors can also directly submit to a journal and, at the same time, publish a preprint.|
+| Binder| Binder creates a containerized executable environment based on a repository (e.g., on GitHub/Lab, Zenodo) including a Jupyter Notebook [@jupyter2018binder]. Readers can launch the analysis and inspect the workflow in a browser.|
+| Code Ocean|Code Ocean creates “capsules” containing code, data, and the computational environment. While reading, users can execute and inspect the analysis in a separate window below the article or on Code Ocean’s website [@clyburne2019computational].|
+| eLife RDS| RDS originates from the life sciences. Authors can publish executable documents based on Stencila (https://stenci.la/), an open-source editor for articles. The executable document, which contains the whole narrative and executable code snippets, is not only a supplement but the actual scientific article.|
+| Galaxy| Galaxy [@goecks2010galaxy] provides features tailored to use cases in the life sciences. It is a web app for developing comput. analyses without programming expertise. Scientists can upload and analyze data using Jupyter Notebooks [@gruning2017jupyter].|
+| Gigantum| Gigantum packages code, data, the computational environment, and the work history into a Git repository. Gigantum is composed of a client app for creating as well as executing analyses locally and a cloud-based infrastructure for sharing computations and collaborating with peers.|
+| Manuscripts|Manuscripts is an online tool for writing executable documents collaboratively based on the concept of literate programming, but featuring a “What you see is what you get” user interface. The runtime environment of the author is, however, not considered.|
+| o2r|o2r [@nust2017opening] originates from the geosciences and addresses publishers who want to extend their infrastructure via a reproducibility service during the process of paper submission [@nust_daniel2018]. Authors can create interactive figures, allowing readers to change model parameters using a slider [@konkol2019creating].|
+| REANA    	| REANA [@vsimko2019reana, @chen2019open] originates from particle physics and provides a specification for capturing data, code, and the comput. environment. Based on this structure and manually created configuration files, REANA provides command line interface (CLI) commands to run large analyses on a remote REANA cloud.|
+| ReproZip  	| ReproZip [@steeves2018using, @chirigati2016data] provides a set of CLI commands for encapsulating data, code, and the computational environment. Users can execute the resulting bundle on a server provided by ReproZip [@rampin2018reproserver] or locally on different systems. |
+| Whole Tale 	|With Whole Tale [@brinckman2019computing], authors can create so-called “Tales” that combine narrative, data, code, and the computational environment. Readers can inspect the materials and execute the analysis in the original environment.|
+
+Table 1: Overview of applications we included in the analysis.
+
+||Authorea|Binder|Code Ocean|eLife RDS|Galaxy|Gigantum|Manuscripts|o2r|REANA|ReproZip|Whole Tale|
+|-|-|-|-|-|-|-|-|-|-|-|-|
+|-|-|-|-|-|-|-|-|-|-|-|-|
+
