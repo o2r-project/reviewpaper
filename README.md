@@ -3,6 +3,7 @@
 This repository contains the review paper and tables of the review paper _"Publishing computational research - A review of infrastructures for reproducible and transparent scholarly communication"_.
 
 <!-- badges: start -->
+[![Article DOI](https://img.shields.io/badge/Article%20DOI-10.1186%2Fs41073--020--00095--y-yellow)](https://doi.org/10.1186/s41073-020-00095-y)
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/o2r-project/reviewpaper/master?urlpath=rstudio)
 <!-- badges: end -->
 
@@ -10,7 +11,7 @@ This repository contains the review paper and tables of the review paper _"Publi
 
 ### Article
 
-(article currently in preparation for submission)
+> Konkol, M., Nüst, D. & Goulier, L. _Publishing computational research - a review of infrastructures for reproducible and transparent scholarly communication_. Res Integr Peer Rev 5, 10 (2020). https://doi.org/10.1186/s41073-020-00095-y
 
 ### Preprint
 
