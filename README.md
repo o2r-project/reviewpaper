@@ -4,6 +4,7 @@ This repository contains the review paper and tables of the review paper _"Publi
 
 <!-- badges: start -->
 [![Article DOI](https://img.shields.io/badge/Article%20DOI-10.1186%2Fs41073--020--00095--y-yellow)](https://doi.org/10.1186/s41073-020-00095-y)
+[![Data and code DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4768290.svg)](https://doi.org/10.5281/zenodo.4768290)
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/o2r-project/reviewpaper/master?urlpath=rstudio)
 <!-- badges: end -->
 
